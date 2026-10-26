@@ -126,3 +126,5 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
 .changelog li { margin: .2em 0; }
 .status { display: inline-block; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; color: var(--ok); white-space: nowrap; }
 .w5 dd ul.plain, .extra ul.plain { margin-top: 4px; }
+.update { background: var(--code-bg); border-left: 3px solid var(--accent); border-radius: 4px; padding: 10px 14px; }
+.update p { max-width: none; }

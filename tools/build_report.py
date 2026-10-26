@@ -15,7 +15,8 @@ REPORT.md layout:
     **High. Why: confirmed.**
     - **Who:** ...                Who/What/When/Where/Why form the 5W list; any other
     - **Impact:** ...             "- **Field:**" (Impact, Mitigation, Status, Suggested fix...) goes below it.
-    A card may also be (or end with) plain paragraphs or a "- " bullet list after a blank line.
+    - **Update, 26 Oct (run):** ... any field starting "Update" is a dated note at the card's end.
+    A card may also be (or end with) plain paragraphs and "- " lists after a blank line, in source order.
     ---
     ## What worked {#worked}      named sections below the cards render below them
     ## Changelog                  bullets, newest first
@@ -107,10 +108,12 @@ def md_block(text):
     return "\n".join(out)
 
 
-def field_html(v, subs):
+def field_html(v, subs, tail=""):
     h = inline(v) if v.strip() else ""
     if subs:
         h += '<ul class="plain">%s</ul>' % "".join("<li>%s</li>" % inline(x) for x in subs)
+    if tail.strip():
+        h += " " + inline(tail.strip())
     return h
 
 
@@ -121,13 +124,13 @@ def card(cid, title, body):
     why = re.search(r"Why: (.+?)\.?\s*$", sevm.group(2)) if sevm else None
     conf = "Why: " + why.group(1) if why else ""
     after = body[sevm.end():] if sevm else body
-    fields, extra, paras, items = [], [], [], []
+    fields, extra, notes, blocks = [], [], [], []  # field: [key, text, sub-bullets, text after them]; block: ["p", text] or ["ul", items]
     cur, gap = None, True
     for line in after.splitlines():
         m = FIELD.match(line)
         if m:
-            cur = [m.group(1), m.group(2), []]
-            (fields if cur[0] in W5 else extra).append(cur)
+            cur = [m.group(1), m.group(2), [], ""]
+            (fields if cur[0] in W5 else notes if cur[0].startswith("Update") else extra).append(cur)
         elif not line.strip():
             cur, gap = None, True
             continue
@@ -135,14 +138,18 @@ def card(cid, title, body):
             cur[2].append(line.strip()[2:])
         elif cur and line.strip().startswith("|"):
             cur[1] += "\n" + line.strip()
+        elif cur and cur[2]:
+            cur[3] += " " + line.strip()
         elif cur:
             cur[1] += " " + line.strip()
         elif line.startswith("- "):
-            items.append(line[2:].strip())
-        elif paras and not gap:
-            paras[-1] += " " + line.strip()
+            if gap or not blocks or blocks[-1][0] != "ul":
+                blocks.append(["ul", []])
+            blocks[-1][1].append(line[2:].strip())
+        elif blocks and blocks[-1][0] == "p" and not gap:
+            blocks[-1][1] += " " + line.strip()
         else:
-            paras.append(line.strip())
+            blocks.append(["p", line.strip()])
         gap = False
     s = SEV[sev.lower()]
     h = ['  <article class="record %s" id="%s">' % (s, cid.lower()),
@@ -150,21 +157,23 @@ def card(cid, title, body):
          % (cid, inline(title.strip()), s, sev, html.escape(conf))]
     if fields:
         h.append('    <dl class="w5">')
-        h += ["      <dt>%s</dt><dd>%s</dd>" % (html.escape(k), field_html(v, subs)) for k, v, subs in fields]
+        h += ["      <dt>%s</dt><dd>%s</dd>" % (html.escape(k), field_html(v, subs, tail)) for k, v, subs, tail in fields]
         h.append("    </dl>")
-    h += ["    <p>%s</p>" % inline(p) for p in paras]
-    if items:
-        h.append('    <ul class="plain">%s</ul>' % "".join("<li>%s</li>" % inline(x) for x in items))
+    for kind, x in blocks:
+        h.append("    <p>%s</p>" % inline(x) if kind == "p" else
+                 '    <ul class="plain">%s</ul>' % "".join("<li>%s</li>" % inline(i) for i in x))
     if extra:
         h.append('    <div class="extra">')
-        for k, v, subs in extra:
+        for k, v, subs, tail in extra:
             if "\n|" in v:  # a markdown table inside a field
                 txt, _, tbl = v.partition("\n|")
                 inner = ("<p>%s</p>" % inline(txt) if txt.strip() else "") + md_block("|" + tbl)
             else:
-                inner = "<p>%s</p>" % field_html(v, subs)
+                inner = "<p>%s</p>" % field_html(v, subs, tail)
             h.append("      <div><h4>%s</h4>%s</div>" % (html.escape(k), inner))
         h.append("    </div>")
+    # "- **Update, 26 Oct (recovery run):** ..." fields: dated notes at the end of the card
+    h += ['    <div class="update"><p><b>%s:</b> %s</p></div>' % (inline(k), field_html(v, subs, tail)) for k, v, subs, tail in notes]
     h.append("  </article>")
     return sev, "\n".join(h)
 

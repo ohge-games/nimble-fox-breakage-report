@@ -45,8 +45,10 @@ To look before publishing: `python tools/merge_update.py --pending --dry-run` pr
 - **Cards**: `## N1. Title`, then a `**High. Why: confirmed.**` line, then fields:
   `- **Who:**`, `What`, `When`, `Where` and `Why` form the 5W list; any other `- **Field:**`
   (Impact, Mitigation, Status, Suggested fix...) is shown beneath it. Indented `  - ` lines are
-  bullets inside a field. A card can also be, or end with, plain paragraphs or a `- ` list after a
-  blank line. A `---` line follows the last card.
+  bullets inside a field, and an indented plain line after them continues the field. A field named
+  `Update, 26 Oct (recovery run)` (any name starting with `Update`) renders as a dated note at the
+  end of the card. A card can also be, or end with, plain paragraphs and `- ` lists after a blank
+  line, shown in source order. A `---` line follows the last card.
 - **`## Changelog`**: bullets, newest first.
 - **Inline:** `` `code` ``, `**bold**`, `[text](https://...)`, and `{{Fixed}}` for a status pill.
 
