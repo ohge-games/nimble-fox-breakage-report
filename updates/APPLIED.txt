@@ -1,1 +1,2 @@
 2026-10-26-recovery-run-and-playtest.md
+2026-10-27-run-3.md

@@ -138,7 +138,7 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
 </head><body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">First edition · Cover-shooter roguelike (BLACKOUT DISTRICT) · last updated 26 Oct 2026 · 32 breakages (3 critical · 10 high · 11 medium · 8 low)</div>
+  <div class="eyebrow">First edition · Cover-shooter roguelike (BLACKOUT DISTRICT) · last updated 27 Oct 2026 · 33 breakages (3 critical · 10 high · 12 medium · 8 low)</div>
   
   <h1>Where Nimble Fox breaks: an isometric roguelike in Ultra Nimble mode</h1>
   <p class="lede">Found while building BLACKOUT DISTRICT, an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk), entirely through the Nimble Fox web builder in Ultra Nimble mode. Same 5W format as the Virtual Matter reports (<a href="https://ohge-games.github.io/virtual-matter-breakage-report/scar/">SCAR edition</a>): Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… Unlike the Virtual Matter projects, the agent doing the building here is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.</p>
@@ -154,11 +154,11 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
 <section id="state">
   <h2>Current state</h2>
   <ul class="plain">
-    <li><b>Playable; run-3 notes drafted.</b> A recovery run (26 Oct) restored movement and aim (N27) and finished the remaining notes, except Aspects, the three extra weapons, the three extra enemy types and phone frame-rate profiling. The creator’s playtest of that build reached floor 13 in 48:10, beating two bosses, and produced N30–N32.</li>
-    <li><b>What the build now has:</b> dash charges, JAMMED and EMP pylons, all three bosses cycling (ENFORCER MECH, NETRUNNER QUEEN, CHROME TWINS), forks that seal the branch not taken, capsule-based rig weighting, weapon grip sockets, mobile quality tiers with pixel-ratio and frame caps, and a touch layout clear of an estimated host corner.</li>
-    <li><b>Balance, by the builder's no-god-mode bot</b> (five runs, scripted cautious player): reached the floor-5 boss at 14.4–14.8 min with 2–4 implants; died on floors 2, 4, 5 and 5. Scrip is still above target (1,150–1,350 unspent at the boss), so enemy and elite drops need about halving; the builder left that decision to the creator.</li>
-    <li><b>The open issues that matter most:</b><ul class="plain"><li>N12: Scrip still too high;</li><li>N6 and N15: the iOS x-ray and phone-heat fixes are unverified on a real phone (N14);</li><li>N16: the host corner's size is an estimate, because the builder can't measure Nimble's own overlay.</li></ul></li>
-    <li><b>Next:</b> a run-3 note pass to make the slice feel solid: collision and AI fixes, boss mechanics built around the arena, darker rooms, a factory re-theme of the props, and halved Scrip with a Shard audit. New weapons, enemies, story and audio are parked until the slice is solid.</li>
+    <li><b>Run 3 delivered; creator playtest pending.</b> All 25 run-3 notes (sections A–H) were reported done, each with a named test. Nothing from the parked list was built. The work order and per-section save points from the prompt were followed: data regenerated, compiled and playtested after each section, with snapshots kept.</li>
+    <li><b>Balance, by the bot</b> (god mode off, final batch of five): deaths on floors 4, 5 (at the ENFORCER), 4, 4, 4; boss reached at 14.6 min with 2 implants. Shards are on target at 25.8 per floor. The floor-2 shop is on target; the floor-4 shop is not (3–5 items affordable against a target of 2).</li>
+    <li><b>Bosses, by the bot in god mode:</b> ENFORCER 52–56 s with the pylon bait, QUEEN 82–95 s (HP raised from 1,100 to 1,650 to match fight lengths).</li>
+    <li><b>Not verified:</b> phone frame rate with the new flashlight and drone lights, portrait layouts, how the bosses and Punk attacks feel to a human, and B8 against the creator's clip (N33).</li>
+    <li><b>Before "build the full game":</b> a human playtest of run 3, a small fix for the floor-4 Scrip, a phone check, and an updated full-game design to attach, because the builder cannot change the design package itself (N28).</li>
   </ul>
 </section>
 <section id="index">
@@ -175,9 +175,9 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
         <tr><td class="mono">N7</td><td><span class="sev high">High</span></td><td><a href="#n7">Dark rooms were unreadable: floor, walls and cover nearly invisible</a></td><td>Fixed</td></tr>
         <tr><td class="mono">N8</td><td><span class="sev med">Medium</span></td><td><a href="#n8">Every held weapon was the same grey bar</a></td><td>Fixed (per-weapon models)</td></tr>
         <tr><td class="mono">N9</td><td><span class="sev med">Medium</span></td><td><a href="#n9">The model tool cannot rig; models arrive as unrigged OBJs with unknown commercial rights</a></td><td>Open; release gate</td></tr>
-        <tr><td class="mono">N10</td><td><span class="sev high">High</span></td><td><a href="#n10">Runtime skinning weights vertices by height and side only, so the coat follows the hands</a></td><td>Improved; still visible</td></tr>
+        <tr><td class="mono">N10</td><td><span class="sev high">High</span></td><td><a href="#n10">Runtime skinning weights vertices by height and side only, so the coat follows the hands</a></td><td>Fix applied; needs visual check</td></tr>
         <tr><td class="mono">N11</td><td><span class="sev med">Medium</span></td><td><a href="#n11">Weapons sit unnaturally in the hands, and the off-hand holds a dual-wield pose without the dual-wield implant</a></td><td>Fixed (grip sockets); needs visual check</td></tr>
-        <tr><td class="mono">N12</td><td><span class="sev high">High</span></td><td><a href="#n12">Default balance shipped trivial: effectively unlimited dashes, an implant most rooms, too much currency</a></td><td>Scrip and Shards still high (human-confirmed)</td></tr>
+        <tr><td class="mono">N12</td><td><span class="sev high">High</span></td><td><a href="#n12">Default balance shipped trivial: effectively unlimited dashes, an implant most rooms, too much currency</a></td><td>Shards fixed; floor-4 Scrip still high</td></tr>
         <tr><td class="mono">N13</td><td><span class="sev high">High</span></td><td><a href="#n13">The end-to-end proof run used god mode; balance and damage were never exercised</a></td><td>Fixed on request (no-god-mode bot)</td></tr>
         <tr><td class="mono">N14</td><td><span class="sev high">High</span></td><td><a href="#n14">Browser verification is headless Chromium only; no real browser or phone run before delivery</a></td><td>Tooling gap</td></tr>
         <tr><td class="mono">N15</td><td><span class="sev high">High</span></td><td><a href="#n15">The build runs smoothly on an iPhone but makes it very hot: native pixel ratio, no frame cap, desktop quality</a></td><td>Fix applied; needs phone test</td></tr>
@@ -195,9 +195,10 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
         <tr><td class="mono">N27</td><td><span class="sev crit">Critical</span></td><td><a href="#n27">A run stopped by an empty voucher saved a half-applied build over the playable one: WASD and mouse aim no longer work</a></td><td>Fixed (root cause: stale data index)</td></tr>
         <tr><td class="mono">N28</td><td><span class="sev low">Low</span></td><td><a href="#n28">The downloadable design package is never updated after a run, so it contradicts the build</a></td><td>Confirmed</td></tr>
         <tr><td class="mono">N29</td><td><span class="sev low">Low</span></td><td><a href="#n29">A note set headed "build the full game" was treated as a note pass within the slice's scope</a></td><td>Answered: full scope is a separate action</td></tr>
-        <tr><td class="mono">N30</td><td><span class="sev med">Medium</span></td><td><a href="#n30">Collision isn't enforced everywhere: walk-through props, drones and grenades through pillars, knockback through a locked door, the boss stuck in a pylon</a></td><td>Open; in run-3 notes</td></tr>
-        <tr><td class="mono">N31</td><td><span class="sev med">Medium</span></td><td><a href="#n31">Enemy AI state bugs: spawn clumps that stop pursuing, elites that stand and stare after losing cover</a></td><td>Open; in run-3 notes</td></tr>
-        <tr><td class="mono">N32</td><td><span class="sev low">Low</span></td><td><a href="#n32">Presentation leftovers: implant row runs off-screen, OS cursor over the reticle, floating decals, crates in doorways, Clinic animation only in the hub</a></td><td>Open; in run-3 notes</td></tr>
+        <tr><td class="mono">N30</td><td><span class="sev med">Medium</span></td><td><a href="#n30">Collision isn't enforced everywhere: walk-through props, drones and grenades through pillars, knockback through a locked door, the boss stuck in a pylon</a></td><td>Fixed (tests added); needs human playtest</td></tr>
+        <tr><td class="mono">N31</td><td><span class="sev med">Medium</span></td><td><a href="#n31">Enemy AI state bugs: spawn clumps that stop pursuing, elites that stand and stare after losing cover</a></td><td>Fixed (root causes found); needs human playtest</td></tr>
+        <tr><td class="mono">N32</td><td><span class="sev low">Low</span></td><td><a href="#n32">Presentation leftovers: implant row runs off-screen, OS cursor over the reticle, floating decals, crates in doorways, Clinic animation only in the hub</a></td><td>Fixed; portrait unverified</td></tr>
+        <tr><td class="mono">N33</td><td><span class="sev med">Medium</span></td><td><a href="#n33">Attachments can silently fail to reach the builder: the run-3 screen recording, and one of the three files from the first request</a></td><td>Observed; needs creator confirmation</td></tr>
     </tbody></table></div>
 </section>
 <section id="cards">
@@ -317,6 +318,7 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
     </div>
     <div class="update"><p><b>Update, 26 Oct (recovery run):</b> Fixed per the builder: arm weights now come from capsules around each arm, and the Punk and Rifleman also get leg capsules so jackets stay on the hips. The Netrunner Queen is not rigged: she is one mesh with her throne and hair, so any rig would bend the throne with her; she animates as a whole. Pending a visual check in play.</p></div>
     <div class="update"><p><b>Update, 26 Oct (creator playtest):</b> Better but not fixed. In play the coat hem still bulges toward the aim side, visible in a screen recording. The likely remaining cause is the upper-body aim twist moving vertices below the waist.</p></div>
+    <div class="update"><p><b>Update, 27 Oct (run 3):</b> Coat vertices below the belt (142) now follow the hips only. The builder checked this by skin weights and close-up captures. It could not compare against the creator’s clip, which never reached it (N33). Pending a visual check.</p></div>
   </article>
   <article class="record med" id="n11">
     <div class="rec-head"><span class="rec-id">N11</span><h3>Weapons sit unnaturally, and the off-hand holds a dual-wield pose</h3><span class="sev med">Medium</span><span class="conf">Why: observed</span><a class="back" href="#index">↑ index</a></div>
@@ -337,6 +339,7 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
     </div>
     <div class="update"><p><b>Update, 26 Oct (recovery run):</b> The note values are now on disk (the stopped run had written code but left the old values in the data). The builder’s five-run bot reached the floor-5 boss at 14.4–14.8 min with 2–4 implants, inside the targets. Scrip is still about 2–3× the target at the floor-4 shop. The builder applied the creator’s values exactly and left further changes to the creator, recommending halving enemy and elite drops.</p></div>
     <div class="update"><p><b>Update, 26 Oct (creator playtest):</b> Confirmed by a human run: died on floor 13 at 48:10 with 1,179 unspent Scrip, matching the bot. The same run paid +1,118 Data Shards (about 86 per floor), roughly a third of the whole Chop Doc tree from one run, so Shards need an audit too.</p></div>
+    <div class="update"><p><b>Update, 27 Oct (run 3):</b> Shards fixed: the audit traced the excess to elites paying 3 each while elite chance climbs per floor (about 800 Shards on a 13-floor run). Elites now pay 1 (at most 3 per room) and a cleared combat room pays +3; measured 25.8 per floor. Scrip partly fixed: the floor-2 shop is on target (about 1 item), but the floor-4 shop still sees 448–807 Scrip (3–5 items against a target of 2). The builder named the remaining sources (Scrip caches and the dark-clear bonus) and proposed halving them, but left the decision to the creator. The bot now dies on floors 4–5 instead of beating the boss.</p></div>
   </article>
   <article class="record high" id="n13">
     <div class="rec-head"><span class="rec-id">N13</span><h3>The end-to-end proof run used god mode</h3><span class="sev high">High</span><span class="conf">Why: confirmed from the build log</span><a class="back" href="#index">↑ index</a></div>
@@ -405,6 +408,7 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
       <div><h4>Suggested fix</h4><p>Include <code>NimbleFox/</code> in the export, or offer it as a separate download.</p></div>
     </div>
     <div class="update"><p><b>Update, 26 Oct (recovery run):</b> The 26 Oct export (1,057 files under Assets) still has no <code>NimbleFox/</code> folder, although the builder’s summary points the creator to <code>NimbleFox/Design/BUILD-NOTES.md</code> for details.</p></div>
+    <div class="update"><p><b>Update, 27 Oct (run 3):</b> The 27 Oct export (1,069 files) still omits <code>NimbleFox/</code>, now 43 MB in the workspace and holding the full build-notes history.</p></div>
   </article>
   <article class="record med" id="n20">
     <div class="rec-head"><span class="rec-id">N20</span><h3>The prompt box caps around 6,000–8,000 characters</h3><span class="sev med">Medium</span><span class="conf">Why: observed</span><a class="back" href="#index">↑ index</a></div>
@@ -423,6 +427,7 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
   <article class="record low" id="n22">
     <div class="rec-head"><span class="rec-id">N22</span><h3>Scope trade-offs are made without asking (but are reported)</h3><span class="sev low">Low</span><span class="conf">Why: confirmed</span><a class="back" href="#index">↑ index</a></div>
     <p>Examples: AKIMBO was added by replacing MOMENTUM in the implant pool, with an icon drawn from MOMENTUM's art. Boss scaling was changed to a per-appearance formula, a reasonable reading for one repeating boss but wrong once three bosses cycle. Chop Doc surgery plays after the menu closes rather than during it. Each was listed under "Departures" or in the GDD, which is good practice. Suggested fix: when a departure changes the design document's content (removes an item, changes a formula), ask before applying, or flag it at the top of the completion summary.</p>
+    <div class="update"><p><b>Update, 27 Oct (run 3):</b> Also confirmed: the builder cannot ask questions during a run ("Nobody can answer questions while you work: decide, record"). So any "ask before" instruction can only be honoured before the run starts. It reported the conflict and decided anyway, as designed. Its handling of the open economy choice was right: it left the Scrip values as given and proposed the fix rather than changing them.</p></div>
   </article>
   <article class="record med" id="n23">
     <div class="rec-head"><span class="rec-id">N23</span><h3>Run summary text overlaps, and the pause menu shows through</h3><span class="sev med">Medium</span><span class="conf">Why: observed</span><a class="back" href="#index">↑ index</a></div>
@@ -467,6 +472,7 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
       <div><h4>Impact</h4><p>A creator who downloads the package to see where the project stands gets the original plan, not the current design, and it can't be used to tell what a run changed. Only the build log and the Unity project export show that.</p></div>
       <div><h4>Suggested fix</h4><p>Version the package with each run (0.1.1, 0.2.0…) and fold accepted notes into the GDD and its acceptance table, or label the download "original design package" and link the latest build notes beside it.</p></div>
     </div>
+    <div class="update"><p><b>Update, 27 Oct (run 3):</b> Cause confirmed: per the builder, "builds may not change the design package itself". Run 3 recorded the factory-robot setting in BUILD-NOTES.md instead. So the package’s full-game frame stays the original design until the creator attaches a new one, which matters for the "build the full game" action (N29).</p></div>
   </article>
   <article class="record low" id="n29">
     <div class="rec-head"><span class="rec-id">N29</span><h3>"Build the full game" stayed within slice scope</h3><span class="sev low">Low</span><span class="conf">Why: confirmed from the build log</span><a class="back" href="#index">↑ index</a></div>
@@ -490,6 +496,7 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
     <div class="extra">
       <div><h4>Suggested fix</h4><p>One rule for every solid prop: a collider plus a NavMesh carve. Clamp knockback and thrown objects to the room's NavMesh and bounds. Add a containment check to the playtests: no character or projectile inside a solid or outside the room, sampled throughout the bot runs.</p></div>
     </div>
+    <div class="update"><p><b>Update, 27 Oct (run 3):</b> <span class="status">Fixed</span> Each item has a containment test (pillar, wall, door and pylon checks). Verifying them found one more case, fixed too: a crowd could shove the player through a locked door, leaving the room uncleared forever. Pending human playtest.</p></div>
   </article>
   <article class="record med" id="n31">
     <div class="rec-head"><span class="rec-id">N31</span><h3>Enemy AI state bugs</h3><span class="sev med">Medium</span><span class="conf">Why: observed (creator playtest, 26 Oct)</span><a class="back" href="#index">↑ index</a></div>
@@ -500,11 +507,24 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
     <div class="extra">
       <div><h4>Suggested fix</h4><p>An idle watchdog (any enemy with line of sight that hasn't acted for 2 s re-enters Attack), stuck detection with re-pathing, and a playtest that asserts every enemy attacks or moves within N seconds of seeing the player.</p></div>
     </div>
+    <div class="update"><p><b>Update, 27 Oct (run 3):</b> <span class="status">Fixed</span> with root causes. The stare was a Rifleman retreating to the same damaged cover every frame, so he never fired. Frozen chasers came from comparing the goal with the agent’s own snapped destination, so the path stayed pending whenever the player stood off the NavMesh; this also explains the stalled bot rooms in N31’s original Why. Added: spawn separation, a 2 s idle watchdog, flankers, and a fallback that brings a cut-off enemy back in near the player within about 3 s.</p></div>
   </article>
   <article class="record low" id="n32">
     <div class="rec-head"><span class="rec-id">N32</span><h3>Presentation leftovers</h3><span class="sev low">Low</span><span class="conf">Why: observed (creator playtest, 26 Oct)</span><a class="back" href="#index">↑ index</a></div>
     <ul class="plain"><li>The HUD implant row runs off the right edge of the screen once a run has enough implants.</li><li>The operating-system mouse cursor draws on top of the aim reticle during play.</li><li>Bullet-hole decals stay floating in the air after the cover they hit is destroyed.</li><li>Green ammo crates are regularly placed in corridor doorways.</li><li>The implant chair's sit-down sequence plays in the hub but not in a run's Clinic rooms.</li></ul>
     <p>None of these blocks play. Every one would show in a screenshot review of a long run, which the builder's checks don't include. The HUD overflow, for example, only appears with more implants than the playtests ever hold.</p>
+    <div class="update"><p><b>Update, 27 Oct (run 3):</b> <span class="status">Fixed</span> Implant row wraps (11 icons plus "+N"), cursor hidden in play, decals removed with their cover, a clear 2 m lane through every door, and the Clinic sequence plays in runs with every chair facing the camera. Portrait layouts are not captured.</p></div>
+  </article>
+  <article class="record med" id="n33">
+    <div class="rec-head"><span class="rec-id">N33</span><h3>Attachments can silently fail to reach the builder</h3><span class="sev med">Medium</span><span class="conf">Why: observed in the build log; creator to confirm what was uploaded</span><a class="back" href="#index">↑ index</a></div>
+    <dl class="w5">
+      <dt>What</dt><dd><ul class="plain"><li><b>Run 3:</b> the creator attached a screen recording for note B8, but the builder's attachment folder (<code>Attachments/request-02/</code>) holds only the notes file. The builder said "the screen recording mentioned with B8 was not among the attachments" and verified B8 by skin weights instead.</li><li><b>First request:</b> the folder holds files numbered <code>02</code> (the style sheet) and <code>03</code> (the GDD), with no <code>01</code>. Three files were attached (the GDD, the style sheet and the HUD layout wireframe), so the HUD layout image probably never arrived.</li></ul></dd>
+      <dt>Why</dt><dd>Unknown. Video may not be an accepted type, or an upload may fail without an error. The upload UI gave no warning in either case.</dd>
+    </dl>
+    <div class="extra">
+      <div><h4>Impact</h4><p>Notes that rely on an attachment are verified by other means without the creator knowing, unless they read the build log.</p></div>
+      <div><h4>Suggested fix</h4><p>List the attachments the builder actually received at the start of each run, and reject unsupported types at upload with a visible error.</p></div>
+    </div>
   </article>
 </section>
 <section id="worked">
@@ -564,6 +584,7 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
 <section id="changelog">
   <h2>Changelog</h2>
   <ul class="changelog">
+    <li><b>27 Oct 2026 (run 3):</b> N30–N32 fixed with tests; N31 root causes found. N12 Shards fixed, floor-4 Scrip still high. N28 cause and N22 constraint confirmed by the builder. N33 added. Current state rewritten.</li>
     <li><b>26 Oct 2026:</b> N29 answered (full scope is a separate builder action) and downgraded to Low.</li>
     <li><b>26 Oct 2026 (creator playtest):</b> N30–N32 added. N10 and N12 updated from a floor-13 run.</li>
     <li><b>26 Oct 2026 (recovery run):</b> N27 fixed with root cause. N29 added. Status updates to N6, N10–N13, N15–N17, N19, N23 and N24 from the recovery run's build log and export. Current state rewritten.</li>

@@ -3,7 +3,7 @@ title: Nimble Fox Breakage Report: Ultra Nimble edition
 h1: Where Nimble Fox breaks: an isometric roguelike in Ultra Nimble mode
 edition: First edition
 subject: Cover-shooter roguelike (BLACKOUT DISTRICT)
-updated: 26 Oct 2026
+updated: 27 Oct 2026
 facts:
   - Builder: Nimble Fox web builder, Ultra Nimble mode
   - Engine: Unity 6000.4.11f1, URP 17.4.0
@@ -18,14 +18,11 @@ footer: Compiled by Claude (Opus 5.5) as an outside reviewer of Nimble Fox's bui
 Found while building BLACKOUT DISTRICT, an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk), entirely through the Nimble Fox web builder in Ultra Nimble mode. Same 5W format as the Virtual Matter reports ([SCAR edition](https://ohge-games.github.io/virtual-matter-breakage-report/scar/)): Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… Unlike the Virtual Matter projects, the agent doing the building here is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.
 
 ## Current state {#state}
-- **Playable; run-3 notes drafted.** A recovery run (26 Oct) restored movement and aim (N27) and finished the remaining notes, except Aspects, the three extra weapons, the three extra enemy types and phone frame-rate profiling. The creator’s playtest of that build reached floor 13 in 48:10, beating two bosses, and produced N30–N32.
-- **What the build now has:** dash charges, JAMMED and EMP pylons, all three bosses cycling (ENFORCER MECH, NETRUNNER QUEEN, CHROME TWINS), forks that seal the branch not taken, capsule-based rig weighting, weapon grip sockets, mobile quality tiers with pixel-ratio and frame caps, and a touch layout clear of an estimated host corner.
-- **Balance, by the builder's no-god-mode bot** (five runs, scripted cautious player): reached the floor-5 boss at 14.4–14.8 min with 2–4 implants; died on floors 2, 4, 5 and 5. Scrip is still above target (1,150–1,350 unspent at the boss), so enemy and elite drops need about halving; the builder left that decision to the creator.
-- **The open issues that matter most:**
-  - N12: Scrip still too high;
-  - N6 and N15: the iOS x-ray and phone-heat fixes are unverified on a real phone (N14);
-  - N16: the host corner's size is an estimate, because the builder can't measure Nimble's own overlay.
-- **Next:** a run-3 note pass to make the slice feel solid: collision and AI fixes, boss mechanics built around the arena, darker rooms, a factory re-theme of the props, and halved Scrip with a Shard audit. New weapons, enemies, story and audio are parked until the slice is solid.
+- **Run 3 delivered; creator playtest pending.** All 25 run-3 notes (sections A–H) were reported done, each with a named test. Nothing from the parked list was built. The work order and per-section save points from the prompt were followed: data regenerated, compiled and playtested after each section, with snapshots kept.
+- **Balance, by the bot** (god mode off, final batch of five): deaths on floors 4, 5 (at the ENFORCER), 4, 4, 4; boss reached at 14.6 min with 2 implants. Shards are on target at 25.8 per floor. The floor-2 shop is on target; the floor-4 shop is not (3–5 items affordable against a target of 2).
+- **Bosses, by the bot in god mode:** ENFORCER 52–56 s with the pylon bait, QUEEN 82–95 s (HP raised from 1,100 to 1,650 to match fight lengths).
+- **Not verified:** phone frame rate with the new flashlight and drone lights, portrait layouts, how the bosses and Punk attacks feel to a human, and B8 against the creator's clip (N33).
+- **Before "build the full game":** a human playtest of run 3, a small fix for the floor-4 Scrip, a phone check, and an updated full-game design to attach, because the builder cannot change the design package itself (N28).
 
 ## Index
 
@@ -40,9 +37,9 @@ Found while building BLACKOUT DISTRICT, an isometric 3D cover-shooter roguelike 
 | N7 | High | Dark rooms were unreadable: floor, walls and cover nearly invisible | Fixed |
 | N8 | Medium | Every held weapon was the same grey bar | Fixed (per-weapon models) |
 | N9 | Medium | The model tool cannot rig; models arrive as unrigged OBJs with unknown commercial rights | Open; release gate |
-| N10 | High | Runtime skinning weights vertices by height and side only, so the coat follows the hands | Improved; still visible |
+| N10 | High | Runtime skinning weights vertices by height and side only, so the coat follows the hands | Fix applied; needs visual check |
 | N11 | Medium | Weapons sit unnaturally in the hands, and the off-hand holds a dual-wield pose without the dual-wield implant | Fixed (grip sockets); needs visual check |
-| N12 | High | Default balance shipped trivial: effectively unlimited dashes, an implant most rooms, too much currency | Scrip and Shards still high (human-confirmed) |
+| N12 | High | Default balance shipped trivial: effectively unlimited dashes, an implant most rooms, too much currency | Shards fixed; floor-4 Scrip still high |
 | N13 | High | The end-to-end proof run used god mode; balance and damage were never exercised | Fixed on request (no-god-mode bot) |
 | N14 | High | Browser verification is headless Chromium only; no real browser or phone run before delivery | Tooling gap |
 | N15 | High | The build runs smoothly on an iPhone but makes it very hot: native pixel ratio, no frame cap, desktop quality | Fix applied; needs phone test |
@@ -60,9 +57,10 @@ Found while building BLACKOUT DISTRICT, an isometric 3D cover-shooter roguelike 
 | N27 | Critical | A run stopped by an empty voucher saved a half-applied build over the playable one: WASD and mouse aim no longer work | Fixed (root cause: stale data index) |
 | N28 | Low | The downloadable design package is never updated after a run, so it contradicts the build | Confirmed |
 | N29 | Low | A note set headed "build the full game" was treated as a note pass within the slice's scope | Answered: full scope is a separate action |
-| N30 | Medium | Collision isn't enforced everywhere: walk-through props, drones and grenades through pillars, knockback through a locked door, the boss stuck in a pylon | Open; in run-3 notes |
-| N31 | Medium | Enemy AI state bugs: spawn clumps that stop pursuing, elites that stand and stare after losing cover | Open; in run-3 notes |
-| N32 | Low | Presentation leftovers: implant row runs off-screen, OS cursor over the reticle, floating decals, crates in doorways, Clinic animation only in the hub | Open; in run-3 notes |
+| N30 | Medium | Collision isn't enforced everywhere: walk-through props, drones and grenades through pillars, knockback through a locked door, the boss stuck in a pylon | Fixed (tests added); needs human playtest |
+| N31 | Medium | Enemy AI state bugs: spawn clumps that stop pursuing, elites that stand and stare after losing cover | Fixed (root causes found); needs human playtest |
+| N32 | Low | Presentation leftovers: implant row runs off-screen, OS cursor over the reticle, floating decals, crates in doorways, Clinic animation only in the hub | Fixed; portrait unverified |
+| N33 | Medium | Attachments can silently fail to reach the builder: the run-3 screen recording, and one of the three files from the first request | Observed; needs creator confirmation |
 
 ---
 
@@ -162,6 +160,7 @@ The VIPER pistol, BREACHER shotgun and MANTIS SMG all rendered as an identical l
 - **Suggested fix:** Weight arms by distance from the shoulder-to-hand line (a capsule that includes depth), and weight coat and torso vertices to spine and hips. Apply it to every humanoid profile.
 - **Update, 26 Oct (recovery run):** Fixed per the builder: arm weights now come from capsules around each arm, and the Punk and Rifleman also get leg capsules so jackets stay on the hips. The Netrunner Queen is not rigged: she is one mesh with her throne and hair, so any rig would bend the throne with her; she animates as a whole. Pending a visual check in play.
 - **Update, 26 Oct (creator playtest):** Better but not fixed. In play the coat hem still bulges toward the aim side, visible in a screen recording. The likely remaining cause is the upper-body aim twist moving vertices below the waist.
+- **Update, 27 Oct (run 3):** Coat vertices below the belt (142) now follow the hips only. The builder checked this by skin weights and close-up captures. It could not compare against the creator’s clip, which never reached it (N33). Pending a visual check.
 
 ## N11. Weapons sit unnaturally, and the off-hand holds a dual-wield pose
 **Medium. Why: observed.**
@@ -185,6 +184,7 @@ Weapons float slightly off the hands rather than gripped at a palm socket, and b
 - **Suggested fix:** Run a balance pass with damage on (N13) and report pace (time to boss, implants held at the boss, death floor) against the design document's targets before delivering.
 - **Update, 26 Oct (recovery run):** The note values are now on disk (the stopped run had written code but left the old values in the data). The builder’s five-run bot reached the floor-5 boss at 14.4–14.8 min with 2–4 implants, inside the targets. Scrip is still about 2–3× the target at the floor-4 shop. The builder applied the creator’s values exactly and left further changes to the creator, recommending halving enemy and elite drops.
 - **Update, 26 Oct (creator playtest):** Confirmed by a human run: died on floor 13 at 48:10 with 1,179 unspent Scrip, matching the bot. The same run paid +1,118 Data Shards (about 86 per floor), roughly a third of the whole Chop Doc tree from one run, so Shards need an audit too.
+- **Update, 27 Oct (run 3):** Shards fixed: the audit traced the excess to elites paying 3 each while elite chance climbs per floor (about 800 Shards on a 13-floor run). Elites now pay 1 (at most 3 per room) and a cleared combat room pays +3; measured 25.8 per floor. Scrip partly fixed: the floor-2 shop is on target (about 1 item), but the floor-4 shop still sees 448–807 Scrip (3–5 items against a target of 2). The builder named the remaining sources (Scrip caches and the dark-clear bonus) and proposed halving them, but left the decision to the creator. The bot now dies on floors 4–5 instead of beating the boss.
 
 ## N13. The end-to-end proof run used god mode
 **High. Why: confirmed from the build log.**
@@ -244,6 +244,7 @@ The URP asset uses the Forward path with `m_AdditionalLightsPerObjectLimit: 8`. 
 - **Impact:** A creator continuing the project locally loses the design record, the acceptance evidence and the departures list. They survive only inside a 16,691-line build log.
 - **Suggested fix:** Include `NimbleFox/` in the export, or offer it as a separate download.
 - **Update, 26 Oct (recovery run):** The 26 Oct export (1,057 files under Assets) still has no `NimbleFox/` folder, although the builder’s summary points the creator to `NimbleFox/Design/BUILD-NOTES.md` for details.
+- **Update, 27 Oct (run 3):** The 27 Oct export (1,069 files) still omits `NimbleFox/`, now 43 MB in the workspace and holding the full build-notes history.
 
 ## N20. The prompt box caps around 6,000–8,000 characters
 **Medium. Why: observed.**
@@ -261,6 +262,8 @@ The initial brief had to be trimmed to fit, and the later note sets (36 items) a
 **Low. Why: confirmed.**
 
 Examples: AKIMBO was added by replacing MOMENTUM in the implant pool, with an icon drawn from MOMENTUM's art. Boss scaling was changed to a per-appearance formula, a reasonable reading for one repeating boss but wrong once three bosses cycle. Chop Doc surgery plays after the menu closes rather than during it. Each was listed under "Departures" or in the GDD, which is good practice. Suggested fix: when a departure changes the design document's content (removes an item, changes a formula), ask before applying, or flag it at the top of the completion summary.
+
+- **Update, 27 Oct (run 3):** Also confirmed: the builder cannot ask questions during a run ("Nobody can answer questions while you work: decide, record"). So any "ask before" instruction can only be honoured before the run starts. It reported the conflict and decided anyway, as designed. Its handling of the open economy choice was right: it left the Scrip values as given and proposed the fix rather than changing them.
 
 ## N23. Run summary text overlaps, and the pause menu shows through
 **Medium. Why: observed.**
@@ -315,6 +318,7 @@ In the first slice only the Tab summary showed the current room. {{Fixed on desk
 - **What:** The package downloaded from the site after the fix pass and the interrupted full-build run (`blackout-district-0_1_0_1.zip`) is identical, file for file, to the one downloaded after the first slice run (`blackout-district-0_1_0.zip`): 358 files, 0 differences. Its GDD still describes slice 0.1.0 as READY_FOR_IMPLEMENTATION with no AKIMBO, no weapon swap and no COVER button, all of which the fix pass built.
 - **Impact:** A creator who downloads the package to see where the project stands gets the original plan, not the current design, and it can't be used to tell what a run changed. Only the build log and the Unity project export show that.
 - **Suggested fix:** Version the package with each run (0.1.1, 0.2.0…) and fold accepted notes into the GDD and its acceptance table, or label the download "original design package" and link the latest build notes beside it.
+- **Update, 27 Oct (run 3):** Cause confirmed: per the builder, "builds may not change the design package itself". Run 3 recorded the factory-robot setting in BUILD-NOTES.md instead. So the package’s full-game frame stays the original design until the creator attaches a new one, which matters for the "build the full game" action (N29).
 
 ## N29. "Build the full game" stayed within slice scope
 **Low. Why: confirmed from the build log.**
@@ -337,6 +341,7 @@ In the first slice only the Tab summary showed the current room. {{Fixed on desk
   - The ENFORCER charged into an EMP pylon and got stuck inside it.
 - **Why:** Each object gets collision individually, not from one rule. The builder's playtests check flow and outcomes (rooms lock, enemies die, the boss falls), not physical containment, so none of these surfaced in a passing run.
 - **Suggested fix:** One rule for every solid prop: a collider plus a NavMesh carve. Clamp knockback and thrown objects to the room's NavMesh and bounds. Add a containment check to the playtests: no character or projectile inside a solid or outside the room, sampled throughout the bot runs.
+- **Update, 27 Oct (run 3):** {{Fixed}} Each item has a containment test (pillar, wall, door and pylon checks). Verifying them found one more case, fixed too: a crowd could shove the player through a locked door, leaving the room uncleared forever. Pending human playtest.
 
 ## N31. Enemy AI state bugs
 **Medium. Why: observed (creator playtest, 26 Oct).**
@@ -344,6 +349,7 @@ In the first slice only the Tab summary showed the current room. {{Fixed on desk
 - **What:** Enemies spawned in a clump block one another and stop chasing the player. Elite Riflemen sometimes stand in line of sight without firing, typically after their cover is destroyed. More broadly, enemies use cover but rarely flank, and Punks are slow to attack once in range.
 - **Why:** Likely a state with no exit when cover is lost, and no stuck detection for agents. The balance bot found a related case (a Rifleman it couldn't reach behind a crate) and recorded it as a bot problem rather than a possible AI bug.
 - **Suggested fix:** An idle watchdog (any enemy with line of sight that hasn't acted for 2 s re-enters Attack), stuck detection with re-pathing, and a playtest that asserts every enemy attacks or moves within N seconds of seeing the player.
+- **Update, 27 Oct (run 3):** {{Fixed}} with root causes. The stare was a Rifleman retreating to the same damaged cover every frame, so he never fired. Frozen chasers came from comparing the goal with the agent’s own snapped destination, so the path stayed pending whenever the player stood off the NavMesh; this also explains the stalled bot rooms in N31’s original Why. Added: spawn separation, a 2 s idle watchdog, flankers, and a fallback that brings a cut-off enemy back in near the player within about 3 s.
 
 ## N32. Presentation leftovers
 **Low. Why: observed (creator playtest, 26 Oct).**
@@ -355,6 +361,18 @@ In the first slice only the Tab summary showed the current room. {{Fixed on desk
 - The implant chair's sit-down sequence plays in the hub but not in a run's Clinic rooms.
 
 None of these blocks play. Every one would show in a screenshot review of a long run, which the builder's checks don't include. The HUD overflow, for example, only appears with more implants than the playtests ever hold.
+
+- **Update, 27 Oct (run 3):** {{Fixed}} Implant row wraps (11 icons plus "+N"), cursor hidden in play, decals removed with their cover, a clear 2 m lane through every door, and the Clinic sequence plays in runs with every chair facing the camera. Portrait layouts are not captured.
+
+## N33. Attachments can silently fail to reach the builder
+**Medium. Why: observed in the build log; creator to confirm what was uploaded.**
+
+- **What:**
+  - **Run 3:** the creator attached a screen recording for note B8, but the builder's attachment folder (`Attachments/request-02/`) holds only the notes file. The builder said "the screen recording mentioned with B8 was not among the attachments" and verified B8 by skin weights instead.
+  - **First request:** the folder holds files numbered `02` (the style sheet) and `03` (the GDD), with no `01`. Three files were attached (the GDD, the style sheet and the HUD layout wireframe), so the HUD layout image probably never arrived.
+- **Why:** Unknown. Video may not be an accepted type, or an upload may fail without an error. The upload UI gave no warning in either case.
+- **Impact:** Notes that rely on an attachment are verified by other means without the creator knowing, unless they read the build log.
+- **Suggested fix:** List the attachments the builder actually received at the start of each run, and reject unsupported types at upload with a visible error.
 
 ---
 
@@ -408,6 +426,7 @@ On Virtual Matter the failures were in the engine: streaming, edits, and play cl
 Nimble Fox's builder is strong at the parts that are usually slow: turning a long design document into a structured plan, a polished UI, a clean data-driven architecture, and working features from a page of notes, with honest notes about what it did. Where it breaks is the last step, proving the build works for a real player on a real device. Close that gap, make the cost of each run visible, and the creator's role shrinks to what it should be: deciding whether the game is fun.
 
 ## Changelog
+- **27 Oct 2026 (run 3):** N30–N32 fixed with tests; N31 root causes found. N12 Shards fixed, floor-4 Scrip still high. N28 cause and N22 constraint confirmed by the builder. N33 added. Current state rewritten.
 - **26 Oct 2026:** N29 answered (full scope is a separate builder action) and downgraded to Low.
 - **26 Oct 2026 (creator playtest):** N30–N32 added. N10 and N12 updated from a floor-13 run.
 - **26 Oct 2026 (recovery run):** N27 fixed with root cause. N29 added. Status updates to N6, N10–N13, N15–N17, N19, N23 and N24 from the recovery run's build log and export. Current state rewritten.
