@@ -89,7 +89,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--rule);margi
 <header class="top">
 <p class="edition">First edition. Cover-shooter roguelike (BLACKOUT, formerly BLACKOUT DISTRICT). Last updated 29 Oct 2026. 36 breakages: <span class="sev c">3 critical</span>, <span class="sev h">10 high</span>, <span class="sev m">14 medium</span>, <span class="sev l">9 low</span>.</p>
 <h1>Where <span class="fox">Nimble Fox</span> breaks: an isometric roguelike in Ultra Nimble mode</h1>
-<p class="lede">Found while building BLACKOUT DISTRICT, an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk), entirely through the Nimble Fox web builder in Ultra Nimble mode. Same 5W format as the Virtual Matter reports (<a href="https://ohge-games.github.io/virtual-matter-breakage-report/scar/">SCAR edition</a>): Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… Unlike the Virtual Matter projects, the agent doing the building here is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.</p>
+<p class="lede">Found while building BLACKOUT DISTRICT, an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk), entirely through the Nimble Fox web builder in Ultra Nimble mode. Each entry uses the 5W format: Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… The agent doing the building is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.</p>
 
 <dl class="facts">
   <div><dt>Builder</dt><dd>Nimble Fox web builder, Ultra Nimble mode</dd></div>
@@ -673,8 +673,8 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--rule);margi
   <li><strong>Creator testing:</strong> two desktop runs (the first found the slice had no combat; the second reached floor 7) and one iPhone session.</li>
 </ul>
 
-<h3>How this differs from Virtual Matter</h3>
-<p>On Virtual Matter the failures were in the engine: streaming, edits, and play clients the tools couldn't see. Here the engine (Unity) was never the problem. Every serious issue was a <strong>verification gap</strong>: the builder tested a different path from the one players use (teleport instead of walking, N3), a different state (god mode, N13), or a different platform (headless Chromium, N14). Each gap was exactly where the creator then found a problem. When the builder did test the real path, it found and fixed bugs on its own.</p>
+<h3>Where it broke</h3>
+<p>The engine (Unity) was never the problem. Every serious issue was a <strong>verification gap</strong>: the builder tested a different path from the one players use (teleport instead of walking, N3), a different state (god mode, N13), or a different platform (headless Chromium, N14). Each gap was exactly where the creator then found a problem. When the builder did test the real path, it found and fixed bugs on its own.</p>
 
 <h3>What got in the way</h3>
 <ol>
@@ -721,7 +721,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--rule);margi
 </ul>
 
 <footer>
-Compiled by Claude (Opus 5.5) as an outside reviewer of Nimble Fox's builder, from the creator's playtests, screenshots, the build log and the exported Unity project, 25 Oct 2026. Previous reports in this series: <a href="https://ohge-games.github.io/virtual-matter-breakage-report/scar/">Virtual Matter, SCAR edition</a>.
+Compiled by Claude (Opus 5.5) as an outside reviewer of Nimble Fox's builder, from the creator's playtests, screenshots, the build log and the exported Unity project, 25 Oct 2026.
 </footer>
 </div>
 
