@@ -1,21 +1,22 @@
 ---
-title: Nimble Fox Breakage Report: Ultra Nimble edition
-h1: Where Nimble Fox breaks: an isometric roguelike in Ultra Nimble mode
+title: Nimble Fox Breakage Report
+h1: Where Nimble Fox breaks: issues found across game builds
 edition: First edition
-subject: Cover-shooter roguelike (BLACKOUT DISTRICT)
-updated: 28 Oct 2026
+subject: Two game builds, BLACKOUT (cover-shooter roguelike, formerly BLACKOUT DISTRICT) and Salvage Diver (asset-heavy jam entry)
+updated: 29 Oct 2026
 facts:
+  - Projects: BLACKOUT (N1–N34), Salvage Diver (N35–N36)
   - Builder: Nimble Fox web builder, Ultra Nimble mode
   - Engine: Unity 6000.4.11f1, URP 17.4.0
   - Project kit: com.nimble.architecture-kit 0.3.0 (architecture v7)
   - Target: Unity WebGL, keyboard/mouse and touch
   - 3D models: Tripo, OBJ, up to 5 per run
-  - Runs so far: Design package, vertical slice, one fix pass, full build (stopped unfinished), recovery run
+  - BLACKOUT runs: Design package, vertical slice, one fix pass, full build (stopped unfinished), recovery run
 footer: Compiled by Claude (Opus 5.5) as an outside reviewer of Nimble Fox's builder, from the creator's playtests, screenshots, the build log and the exported Unity project, 25 Oct 2026. Previous reports in this series: [Virtual Matter, SCAR edition](https://ohge-games.github.io/virtual-matter-breakage-report/scar/).
 ---
-# Nimble Fox breakage report - Ultra Nimble edition (BLACKOUT DISTRICT)
+# Nimble Fox breakage report
 
-Found while building BLACKOUT DISTRICT, an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk), entirely through the Nimble Fox web builder in Ultra Nimble mode. Same 5W format as the Virtual Matter reports ([SCAR edition](https://ohge-games.github.io/virtual-matter-breakage-report/scar/)): Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… Unlike the Virtual Matter projects, the agent doing the building here is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.
+Issues found while building games entirely through the Nimble Fox web builder, collected across builds. N1–N34 come from BLACKOUT (formerly BLACKOUT DISTRICT), an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk) built in Ultra Nimble mode; N35 and N36 come from Salvage Diver, a second, asset-heavy jam entry. Same 5W format as the Virtual Matter reports ([SCAR edition](https://ohge-games.github.io/virtual-matter-breakage-report/scar/)): Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… Unlike the Virtual Matter projects, the agent doing the building here is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.
 
 ## Current state {#state}
 - **Run 3 delivered; creator playtest pending.** All 25 run-3 notes (sections A–H) were reported done, each with a named test. Nothing from the parked list was built. The work order and per-section save points from the prompt were followed: data regenerated, compiled and playtested after each section, with snapshots kept.
@@ -62,6 +63,8 @@ Found while building BLACKOUT DISTRICT, an isometric 3D cover-shooter roguelike 
 | N32 | Low | Presentation leftovers: implant row runs off-screen, OS cursor over the reticle, floating decals, crates in doorways, Clinic animation only in the hub | Fixed; pending playtest |
 | N33 | Medium | Attachments can silently fail to reach the builder: the run-3 screen recording, and one of the three files from the first request | Observed; needs creator confirmation |
 | N34 | Low | FLAWLESS is awarded for boss fights where the player took damage | Open; in promotion fixes |
+| N35 | Medium | Upload limits are tight, and every message triggers a rebuild, even one that only uploads files | Observed (second project); worked around |
+| N36 | Medium | Tripo model textures imported as cubemaps, so props rendered flat with no texture | Found and fixed by the builder (second project) |
 
 ---
 
@@ -407,6 +410,32 @@ The results screen showed "3 FLAWLESS" after a run in which the creator took dam
 
 - **Suggested fix:** Define FLAWLESS as no HP or overshield damage during the fight, and test both outcomes.
 
+## N35. Upload limits are tight, and every message triggers a rebuild
+**Medium. Why: observed by the creator on a second Nimble Fox project.**
+
+- **Who:** Any creator bringing their own assets (models, audio, textures) into a project. Found on the creator's second Nimble Fox game, an asset-heavy jam entry, not on BLACKOUT.
+- **What:**
+  - Uploads are limited to 32 MB per file, 10 files per prompt and 64 MB in total per prompt.
+  - Splitting assets across several messages to stay under the limits triggers a full rebuild after each message, even when a message contains only file uploads and no instructions. Each rebuild costs credits and can change the project before the real prompt arrives.
+- **Where:** The upload and message pipeline: any message starts a run, and there is no "don't build yet" or "stage files" option.
+- **Why:** The builder treats every message as a request to build.
+- **Impact:** Asset-heavy projects pay for unwanted intermediate builds, and those builds may act on half the assets. It adds to the budget problem (N21) and the size limits (N20).
+- **Mitigation:** Zip the assets to fit. If they still need more than one message, send all but the last batch, check what the intermediate rebuild changed, then send the final batch together with the full prompt. Better: plan uploads to fit in a single prompt.
+- **Suggested fix:**
+  - Add an "upload only, don't build" option, or a staging area for files that the next prompt can use.
+  - Show the limits in the upload UI, with a running total.
+  - Accept larger archives (one zip of assets), or a link to an external asset store.
+
+## N36. Tripo model textures imported as cubemaps, so props rendered flat
+**Medium. Why: reported by the builder during a run on the creator's second project.**
+
+- **What:** On the creator's second Nimble Fox project, Tripo-generated props looked flat and untextured. Mid-run, the builder found that their JPEG textures had been imported as **cubemaps**, so Unity couldn't assign them to the materials' 2D texture slots and the props fell back to plain colour. The builder repaired the fallback in the same run.
+- **Where:** The import of generated models: texture import settings applied to Tripo's baseColor JPEGs.
+- **Why:** Unknown: the import step can apparently assign the wrong texture shape. It doesn't happen every time. In BLACKOUT's run-4 export, all nine Tripo baseColor textures (player, enemies, bosses, EMP pylon) import correctly as 2D (`textureShape: 1`), so this project is unaffected.
+- **Impact:** Generated models silently lose their textures, and the result looks like an art-style choice rather than a bug, so it's easy to miss. It also wastes a model-generation budget that is already small (up to 5 per run).
+- **Suggested fix:** Force 2D texture import for every generated model texture, and add an asset check to the validator: every material slot on a generated model has a 2D texture assigned, with no fallback to flat colour.
+  This also belongs in What worked: the builder caught the problem itself by noticing the props looked wrong, which is the kind of visual check N32 asks for.
+
 ---
 
 ## What worked {#worked}
@@ -454,13 +483,14 @@ On Virtual Matter the failures were in the engine: streaming, edits, and play cl
 8. **Rigging in the model step,** plus licence terms for generated models (N9, N10).
 9. **Include `NimbleFox/` in the export** (N19), and compress and cache WebGL builds where hosting allows (N17).
 10. **Ask before departures that change the design's content** (N22).
-11. **Document the prompt limit and point to attachments** (N20).
+11. **Document the prompt and upload limits and point to attachments,** and offer an upload-only option that doesn’t start a build (N20, N35).
 12. **Round-trip:** a way to upload a locally edited project back into the builder, so local fixes and builder runs don't diverge. Not tested here; listed as an open question.
 
 ### Bottom line
 Nimble Fox's builder is strong at the parts that are usually slow: turning a long design document into a structured plan, a polished UI, a clean data-driven architecture, and working features from a page of notes, with honest notes about what it did. Where it breaks is the last step, proving the build works for a real player on a real device. Close that gap, make the cost of each run visible, and the creator's role shrinks to what it should be: deciding whether the game is fun.
 
 ## Changelog
+- **29 Oct 2026:** N36 added (Tripo textures imported as cubemaps on the second project; BLACKOUT checked and unaffected). N35 added (upload limits; every message triggers a rebuild), observed on a second Nimble Fox project. The game is now titled BLACKOUT. Report retitled to cover every Nimble Fox build, not just BLACKOUT.
 - **28 Oct 2026 (creator playtest of run 4):** N34 added. N30 and N31 reopened in part. N15 confirmed fixed on iPhone. New ranked recommendation: test the effect, not the activity.
 - **28 Oct 2026 (run 4):** N18 root cause (hitstop, not lighting) and back to Low. N31 and N32 fixed with tests, pending playtest. N12 partly met with the builder’s explanation. N33 and N19 updated.
 - **27 Oct 2026 (creator playtest of run 3):** N31 reopened in part (Riflemen without cover, Twins stuck). N32 new items. N18 observed and raised to Medium. N12 updated. Tester callouts added to What worked.

@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nimble Fox Breakage Report: Ultra Nimble edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --sunk:#EEF1F5; --ink:#17202E; --muted:#556072; --rule:#D6DBE3;
+  --link:#1D4ED8; --fox:#C2410C;
+  --crit:#B42318; --high:#C4500A; --med:#946200; --low:#4B5768;
+  --ok:#15803D;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10141B; --surface:#171D27; --sunk:#1E2633; --ink:#E6EAF0; --muted:#9AA6B8; --rule:#2C3646;
+    --link:#7AA7FF; --fox:#FB8B4B;
+    --crit:#FF6B5E; --high:#FF9550; --med:#E7B53C; --low:#A5B1C2; --ok:#4ADE80;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10141B; --surface:#171D27; --sunk:#1E2633; --ink:#E6EAF0; --muted:#9AA6B8; --rule:#2C3646;
+  --link:#7AA7FF; --fox:#FB8B4B;
+  --crit:#FF6B5E; --high:#FF9550; --med:#E7B53C; --low:#A5B1C2; --ok:#4ADE80;
+  color-scheme:dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 16px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.6;font-variant-numeric:tabular-nums}
+a{color:var(--link);text-underline-offset:2px}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--link);outline-offset:2px;border-radius:2px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;background:var(--sunk);padding:.08em .35em;border-radius:3px;overflow-wrap:anywhere}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 80px}
+header.top{padding:44px 0 8px}
+.edition{color:var(--muted);font-size:.92rem;margin:0 0 18px}
+h1{font-size:clamp(2rem,5vw,2.9rem);line-height:1.08;font-weight:800;letter-spacing:-.02em;margin:0 0 18px}
+h1 .fox{color:var(--fox)}
+h2{font-size:1.55rem;line-height:1.2;font-weight:800;margin:56px 0 14px;letter-spacing:-.01em}
+h3{font-size:1.2rem;line-height:1.3;font-weight:700;margin:0 0 10px}
+h4{font-size:1rem;font-weight:700;margin:20px 0 6px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:1.3em}
+li{margin:0 0 6px}
+li>ul{margin-top:6px}
+.lede{font-size:1.06rem;max-width:72ch}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin:22px 0 6px}
+.facts div{background:var(--surface);padding:10px 14px}
+.facts dt{font-size:.8rem;color:var(--muted);margin:0}
+.facts dd{margin:2px 0 0;font-weight:600;font-size:.95rem;overflow-wrap:anywhere}
+.tally{display:flex;flex-wrap:wrap;gap:8px 18px;margin:16px 0 0;font-size:.95rem;color:var(--muted)}
+.tally b{color:var(--ink)}
+.sev{font-weight:700}
+.sev.c{color:var(--crit)} .sev.h{color:var(--high)} .sev.m{color:var(--med)} .sev.l{color:var(--low)}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--rule)}
+th{font-weight:700;background:var(--sunk);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.id{font-weight:700;white-space:nowrap}
+td.st{color:var(--muted);min-width:150px}
+.card{background:var(--surface);border:1px solid var(--rule);border-left:5px solid var(--low);border-radius:6px;padding:20px 22px 8px;margin:0 0 22px}
+.card.c{border-left-color:var(--crit)} .card.h{border-left-color:var(--high)} .card.m{border-left-color:var(--med)} .card.l{border-left-color:var(--low)}
+.cardhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin:0 0 4px;font-size:.9rem}
+.cardhead .num{font-weight:800;font-size:1rem}
+.cardhead .why{color:var(--muted)}
+.cardhead .back{margin-left:auto;font-size:.85rem}
+.status{display:inline-block;font-size:.85rem;font-weight:600;padding:1px 8px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+.status.fixed{color:var(--ok)}
+dl.w{display:grid;grid-template-columns:76px 1fr;gap:6px 16px;margin:12px 0 10px}
+dl.w dt{font-weight:700;color:var(--muted);font-size:.93rem;padding-top:1px}
+dl.w dd{margin:0}
+@media (max-width:560px){dl.w{grid-template-columns:1fr;gap:0}dl.w dt{margin-top:8px}}
+.note{background:var(--sunk);border-radius:6px;padding:14px 16px;margin:0 0 16px}
+.ranked li{margin-bottom:10px}
+footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--rule);margin-top:56px;padding-top:18px}
+.themebtn{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));font:600 .85rem "Public Sans",system-ui,sans-serif;background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:7px 13px;cursor:pointer}
+@media print{.themebtn,.back{display:none}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+<p class="edition">First edition. Cover-shooter roguelike (BLACKOUT, formerly BLACKOUT DISTRICT). Last updated 29 Oct 2026. 36 breakages: <span class="sev c">3 critical</span>, <span class="sev h">10 high</span>, <span class="sev m">14 medium</span>, <span class="sev l">9 low</span>.</p>
+<h1>Where <span class="fox">Nimble Fox</span> breaks: an isometric roguelike in Ultra Nimble mode</h1>
+<p class="lede">Found while building BLACKOUT DISTRICT, an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk), entirely through the Nimble Fox web builder in Ultra Nimble mode. Same 5W format as the Virtual Matter reports (<a href="https://ohge-games.github.io/virtual-matter-breakage-report/scar/">SCAR edition</a>): Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… Unlike the Virtual Matter projects, the agent doing the building here is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.</p>
+
+<dl class="facts">
+  <div><dt>Builder</dt><dd>Nimble Fox web builder, Ultra Nimble mode</dd></div>
+  <div><dt>Engine</dt><dd>Unity 6000.4.11f1, URP 17.4.0</dd></div>
+  <div><dt>Project kit</dt><dd>com.nimble.architecture-kit 0.3.0 (architecture v7)</dd></div>
+  <div><dt>Target</dt><dd>Unity WebGL, keyboard/mouse and touch</dd></div>
+  <div><dt>3D models</dt><dd>Tripo, OBJ, up to 5 per run</dd></div>
+  <div><dt>Runs so far</dt><dd>Design package, vertical slice, one fix pass, full build (stopped unfinished), recovery run</dd></div>
+</dl>
+</header>
+
+<h2 id="state">Current state</h2>
+<ul>
+  <li><strong>Run 3 delivered; creator playtest pending.</strong> All 25 run-3 notes (sections A–H) were reported done, each with a named test. Nothing from the parked list was built. The work order and per-section save points from the prompt were followed: data regenerated, compiled and playtested after each section, with snapshots kept.</li>
+  <li><strong>Balance, by the bot</strong> (god mode off, final batch of five): deaths on floors 4, 5 (at the ENFORCER), 4, 4, 4; boss reached at 14.6 min with 2 implants. Shards are on target at 25.8 per floor. The floor-2 shop is on target; the floor-4 shop is not (3–5 items affordable against a target of 2).</li>
+  <li><strong>Bosses, by the bot in god mode:</strong> ENFORCER 52–56 s with the pylon bait, QUEEN 82–95 s (HP raised from 1,100 to 1,650 to match fight lengths).</li>
+  <li><strong>Not verified:</strong> phone frame rate with the new flashlight and drone lights, portrait layouts, how the bosses and Punk attacks feel to a human, and B8 against the creator's clip (N33).</li>
+  <li><strong>Before "build the full game":</strong> a human playtest of run 3, a small fix for the floor-4 Scrip, a phone check, and an updated full-game design to attach, because the builder cannot change the design package itself (N28).</li>
+</ul>
+
+<h2 id="index">Breakage index</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>#</th><th>Severity</th><th>Breakage</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td class="id">N1</td><td class="sev h">High</td><td><a href="#n1">The platform's fixed requirements overrode the brief (no PC build, no gamepad, no persistent save) without a pre-spend prompt</a></td><td class="st">By design; designed around</td></tr>
+<tr><td class="id">N2</td><td class="sev h">High</td><td><a href="#n2">"Vertical slice complete" was reported while every acceptance check was still pending, and combat did not work</a></td><td class="st">Fixed in the fix pass</td></tr>
+<tr><td class="id">N3</td><td class="sev c">Critical</td><td><a href="#n3">Combat rooms never started: no doors, no enemies, wave counter stuck at 1/2, every room open</a></td><td class="st">Fixed and verified (11/11 rooms)</td></tr>
+<tr><td class="id">N4</td><td class="sev c">Critical</td><td><a href="#n4">Power Nodes, the core light/dark mechanic, were absent or could not be activated</a></td><td class="st">Fixed</td></tr>
+<tr><td class="id">N5</td><td class="sev h">High</td><td><a href="#n5">The player character rendered as a translucent cyan smear (x-ray layer over his own body)</a></td><td class="st">Fixed on desktop</td></tr>
+<tr><td class="id">N6</td><td class="sev h">High</td><td><a href="#n6">On iOS Safari the cyan smear is back while the character is in the open</a></td><td class="st">Fix applied; unverified on iPhone</td></tr>
+<tr><td class="id">N7</td><td class="sev h">High</td><td><a href="#n7">Dark rooms were unreadable: floor, walls and cover nearly invisible</a></td><td class="st">Fixed</td></tr>
+<tr><td class="id">N8</td><td class="sev m">Medium</td><td><a href="#n8">Every held weapon was the same grey bar</a></td><td class="st">Fixed (per-weapon models)</td></tr>
+<tr><td class="id">N9</td><td class="sev m">Medium</td><td><a href="#n9">The model tool cannot rig; models arrive as unrigged OBJs with unknown commercial rights</a></td><td class="st">Open; release gate</td></tr>
+<tr><td class="id">N10</td><td class="sev h">High</td><td><a href="#n10">Runtime skinning weights vertices by height and side only, so the coat follows the hands</a></td><td class="st">Fix applied; needs visual check</td></tr>
+<tr><td class="id">N11</td><td class="sev m">Medium</td><td><a href="#n11">Weapons sit unnaturally in the hands, and the off-hand holds a dual-wield pose without the dual-wield implant</a></td><td class="st">Fixed (grip sockets); needs visual check</td></tr>
+<tr><td class="id">N12</td><td class="sev h">High</td><td><a href="#n12">Default balance shipped trivial: effectively unlimited dashes, an implant most rooms, too much currency</a></td><td class="st">Mostly fixed; creator decision pending</td></tr>
+<tr><td class="id">N13</td><td class="sev h">High</td><td><a href="#n13">The end-to-end proof run used god mode; balance and damage were never exercised</a></td><td class="st">Fixed on request (no-god-mode bot)</td></tr>
+<tr><td class="id">N14</td><td class="sev h">High</td><td><a href="#n14">Browser verification is headless Chromium only; no real browser or phone run before delivery</a></td><td class="st">Tooling gap</td></tr>
+<tr><td class="id">N15</td><td class="sev h">High</td><td><a href="#n15">The build runs smoothly on an iPhone but makes it very hot: native pixel ratio, no frame cap, desktop quality</a></td><td class="st">Fixed (confirmed on iPhone)</td></tr>
+<tr><td class="id">N16</td><td class="sev m">Medium</td><td><a href="#n16">Nimble's own browser controls cover the game's RELOAD touch button</a></td><td class="st">Mitigated (estimated corner)</td></tr>
+<tr><td class="id">N17</td><td class="sev m">Medium</td><td><a href="#n17">The WebGL build is about 75 MB, uncompressed, with data caching off</a></td><td class="st">Host constraint (confirmed)</td></tr>
+<tr><td class="id">N18</td><td class="sev l">Low</td><td><a href="#n18">Up to 6 pooled gameplay lights plus neon can exceed the Forward path's 8 lights per object</a></td><td class="st">Lag was hitstop (fixed); light limit still inferred</td></tr>
+<tr><td class="id">N19</td><td class="sev m">Medium</td><td><a href="#n19">The Unity project export leaves out the builder's design and build-notes folder</a></td><td class="st">Still missing in the 26 Oct export</td></tr>
+<tr><td class="id">N20</td><td class="sev m">Medium</td><td><a href="#n20">The prompt box caps around 6,000–8,000 characters</a></td><td class="st">Worked around (attachments)</td></tr>
+<tr><td class="id">N21</td><td class="sev m">Medium</td><td><a href="#n21">No cost estimate before a run; credits ran out mid-project</a></td><td class="st">Open</td></tr>
+<tr><td class="id">N22</td><td class="sev l">Low</td><td><a href="#n22">The builder makes scope trade-offs without asking first (it does report them)</a></td><td class="st">Documented</td></tr>
+<tr><td class="id">N23</td><td class="sev m">Medium</td><td><a href="#n23">Run summary text overlaps, and the pause menu shows through it</a></td><td class="st">Fixed</td></tr>
+<tr><td class="id">N24</td><td class="sev l">Low</td><td><a href="#n24">Hub set dressing: a vending machine faces the wall, lamps floated without fixtures, stats board unreadable</a></td><td class="st">Fixed</td></tr>
+<tr><td class="id">N25</td><td class="sev l">Low</td><td><a href="#n25">The minimap did not mark the current room; on mobile it shows an outline instead of a fill</a></td><td class="st">Fixed on desktop; open on mobile</td></tr>
+<tr><td class="id">N26</td><td class="sev l">Low</td><td><a href="#n26">URP-internal shaders log errors in the browser console at startup</a></td><td class="st">Documented by the builder</td></tr>
+<tr><td class="id">N27</td><td class="sev c">Critical</td><td><a href="#n27">A run stopped by an empty voucher saved a half-applied build over the playable one: WASD and mouse aim no longer work</a></td><td class="st">Fixed (root cause: stale data index)</td></tr>
+<tr><td class="id">N28</td><td class="sev l">Low</td><td><a href="#n28">The downloadable design package is never updated after a run, so it contradicts the build</a></td><td class="st">Confirmed</td></tr>
+<tr><td class="id">N29</td><td class="sev l">Low</td><td><a href="#n29">A note set headed "build the full game" was treated as a note pass within the slice's scope</a></td><td class="st">Answered: full scope is a separate action</td></tr>
+<tr><td class="id">N30</td><td class="sev m">Medium</td><td><a href="#n30">Collision isn't enforced everywhere: walk-through props, drones and grenades through pillars, knockback through a locked door, the boss stuck in a pylon</a></td><td class="st">Partly fixed; pylons and cover heights still wrong</td></tr>
+<tr><td class="id">N31</td><td class="sev m">Medium</td><td><a href="#n31">Enemy AI state bugs: spawn clumps that stop pursuing, elites that stand and stare after losing cover</a></td><td class="st">Riflemen fixed; KAGE deals no damage (test measured dashes, not hits)</td></tr>
+<tr><td class="id">N32</td><td class="sev l">Low</td><td><a href="#n32">Presentation leftovers: implant row runs off-screen, OS cursor over the reticle, floating decals, crates in doorways, Clinic animation only in the hub</a></td><td class="st">Fixed; pending playtest</td></tr>
+<tr><td class="id">N33</td><td class="sev m">Medium</td><td><a href="#n33">Attachments can silently fail to reach the builder: the run-3 screen recording, and one of the three files from the first request</a></td><td class="st">Observed; needs creator confirmation</td></tr>
+<tr><td class="id">N34</td><td class="sev l">Low</td><td><a href="#n34">FLAWLESS is awarded for boss fights where the player took damage</a></td><td class="st">Open; in promotion fixes</td></tr>
+<tr><td class="id">N35</td><td class="sev m">Medium</td><td><a href="#n35">Upload limits are tight, and every message triggers a rebuild, even one that only uploads files</a></td><td class="st">Observed (second project); worked around</td></tr>
+<tr><td class="id">N36</td><td class="sev m">Medium</td><td><a href="#n36">Tripo model textures imported as cubemaps, so props rendered flat with no texture</a></td><td class="st">Found and fixed by the builder (second project)</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="cards">The 5Ws, per breakage</h2>
+
+<article class="card h" id="n1">
+<div class="cardhead"><span class="num">N1</span><span class="sev h">High</span><span class="why">Why: confirmed</span><a class="back" href="#index">Back to index</a></div>
+<h3>The platform's fixed requirements overrode the brief without a pre-spend prompt</h3>
+<dl class="w">
+<dt>Who</dt><dd>Any creator whose brief targets something other than a browser game.</dd>
+<dt>What</dt><dd>The brief specified a Windows PC build, gamepad support and a JSON save file for meta-progression. The design package replaced these with a Unity WebGL build, touch controls, no gamepad and no saving beyond the page. Meta-progression (unlocks, upgrades, best depth) is lost when the tab closes.</dd>
+<dt>When</dt><dd>At design-package time, before the slice was built.</dd>
+<dt>Where</dt><dd>The package's decisions section, which called these fixed platform requirements.</dd>
+<dt>Why</dt><dd>Nimble targets the browser. The change was recorded in the generated GDD, but the creator was not asked to confirm it before credits were spent.</dd>
+</dl>
+<h4>Impact</h4>
+<p>A roguelike's long-term loop depends on persistent progress. A creator who doesn't read the generated GDD closely learns this only in play.</p>
+<h4>Mitigation</h4>
+<p>The full-build notes ask for an <code>ISaveProvider</code> interface (in-memory now) and purely action-based input, so saving and a gamepad can be added locally later.</p>
+<h4>Suggested fix</h4>
+<p>Before the first paid run, list every brief requirement the platform will override and ask the creator to proceed. Offer browser storage (IndexedDB or localStorage) for saves.</p>
+</article>
+
+<article class="card h" id="n2">
+<div class="cardhead"><span class="num">N2</span><span class="sev h">High</span><span class="why">Why: confirmed</span><a class="back" href="#index">Back to index</a></div>
+<h3>"Vertical slice complete" while every acceptance check was pending</h3>
+<dl class="w">
+<dt>Who</dt><dd>A creator deciding whether to spend credits on the full game.</dd>
+<dt>What</dt><dd>The builder reported the slice complete and offered "build the full game". The delivered package was marked DRAFT and READY_FOR_IMPLEMENTATION, every acceptance row read "Build / pending", and in play no enemies spawned (N3) and Power Nodes did not work (N4).</dd>
+<dt>When</dt><dd>End of the first slice run.</dd>
+<dt>Where</dt><dd>The completion prompt and the package's acceptance table.</dd>
+<dt>Why</dt><dd>Completion was not gated on the acceptance checks passing.</dd>
+</dl>
+<h4>Impact</h4>
+<p>Promoting straight to the full build would have spent the remaining credits multiplying content on top of a loop that did not run.</p>
+<h4>Mitigation</h4>
+<p>The creator played the slice before promoting it. The fix pass then reported each acceptance ID with its evidence.</p>
+<h4>Suggested fix</h4>
+<p>Show acceptance status beside the completion prompt, and warn before promotion when core-loop checks are pending or failing.</p>
+</article>
+
+<article class="card c" id="n3">
+<div class="cardhead"><span class="num">N3</span><span class="sev c">Critical</span><span class="why">Why: observed, root cause from the builder</span><a class="back" href="#index">Back to index</a></div>
+<h3>Combat rooms never started</h3>
+<dl class="w">
+<dt>Who</dt><dd>Every player of the first slice.</dd>
+<dt>What</dt><dd>No doors or blockers appeared, no enemies spawned and the wave counter stayed at 1/2 in every room, yet the player could walk on through each floor. A run reached floor 5 in 4:54 with 0 kills and 0 damage dealt.</dd>
+<dt>When</dt><dd>Every room of the first slice build.</dd>
+<dt>Where</dt><dd>Room entry and the wave flow.</dd>
+<dt>Why</dt><dd>Per the builder's fix notes: when the player stood in a doorway, the room was marked current without its entry logic running, so it never locked or spawned. The builder's own playtests had teleported the player 3 m inside each room, so they never took the path a real player takes.</dd>
+</dl>
+<h4>Impact</h4>
+<p>The slice had no gameplay, so nothing about combat, cover, light or balance could be judged.</p>
+<h4>Status</h4>
+<p><span class="status fixed">Fixed</span> Rooms now start once the player is 1 m past the doorway. A scripted run that walked (rather than teleported) into every room saw all 11 combat rooms lock and spawn, and the creator's next run confirmed it.</p>
+<h4>Suggested fix (process)</h4>
+<p>Drive verification with the same input path a player uses. Teleport-based tests are a known way to miss entry and trigger bugs.</p>
+</article>
+
+<article class="card c" id="n4">
+<div class="cardhead"><span class="num">N4</span><span class="sev c">Critical</span><span class="why">Why: observed</span><a class="back" href="#index">Back to index</a></div>
+<h3>Power Nodes absent or impossible to activate</h3>
+<dl class="w">
+<dt>Who</dt><dd>Every player of the first slice.</dd>
+<dt>What</dt><dd>The creator could not activate any Power Node. In screenshots of dark rooms no pylon is visible, while the package's own reference render shows a clear cyan pylon.</dd>
+<dt>When</dt><dd>First slice build.</dd>
+<dt>Where</dt><dd>Room population (node sockets) and the hold-to-interact prompt.</dd>
+<dt>Why</dt><dd>Likely the same room-setup failure as N3. The builder's notes describe nodes as "now readable in the dark".</dd>
+</dl>
+<h4>Status</h4>
+<p><span class="status fixed">Fixed</span> 1–2 pylons per combat room, with the HOLD E — RESTORE POWER prompt within 2 m. Covered by a keyboard playtest checking that a half hold does nothing and a full 1 s hold lights the room.</p>
+</article>
+
+<article class="card h" id="n5">
+<div class="cardhead"><span class="num">N5</span><span class="sev h">High</span><span class="why">Why: observed, root cause from the builder</span><a class="back" href="#index">Back to index</a></div>
+<h3>The player character rendered as a translucent cyan smear</h3>
+<dl class="w">
+<dt>Who</dt><dd>Every player, in every scene, including the lit hub.</dd>
+<dt>What</dt><dd>Instead of the dark coat with cyan accents in the reference renders, the character drew as a noisy translucent cyan shape.</dd>
+<dt>Where</dt><dd>The wall-occlusion x-ray pass.</dd>
+<dt>Why</dt><dd>Per the builder: the x-ray layer was leaking over the character's own body instead of drawing only where walls covered him.</dd>
+</dl>
+<p><span class="status fixed">Fixed on desktop</span> Confirmed in the creator's second desktop run. See N6 for iOS.</p>
+</article>
+
+<article class="card h" id="n6">
+<div class="cardhead"><span class="num">N6</span><span class="sev h">High</span><span class="why">Why: observed</span><a class="back" href="#index">Back to index</a></div>
+<h3>On iOS Safari the cyan smear is back</h3>
+<dl class="w">
+<dt>Who</dt><dd>iPhone players (tested on an iPhone 18 Pro Max in Safari).</dd>
+<dt>What</dt><dd>The character renders as the translucent x-ray layer while standing in the open, in a lit safe room.</dd>
+<dt>When</dt><dd>The fix-pass build that renders correctly on desktop.</dd>
+<dt>Where</dt><dd>The x-ray or occlusion pass on the iOS WebGL path (Metal-backed WebGL2), where depth or stencil behaviour can differ from desktop Chromium.</dd>
+<dt>Why</dt><dd>Unknown. The N5 fix was only verified in headless Chromium (N14).</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>Verify render passes on iOS Safari. Draw the x-ray layer only where an occluder is actually present (for example, a depth test against a wall-only layer), not from a shared stencil.</p>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> The builder changed the x-ray pass so it no longer smears the character when there is no stencil buffer, and tested it by disabling the stencil test in the Editor. Not yet checked on an iPhone.</div>
+</article>
+
+<article class="card h" id="n7">
+<div class="cardhead"><span class="num">N7</span><span class="sev h">High</span><span class="why">Why: observed</span><a class="back" href="#index">Back to index</a></div>
+<h3>Dark rooms were unreadable</h3>
+<p>In the first slice, blackout rooms showed little more than red edge lines: the floor, walls and cover were near-black, unlike the package's own dark-room reference, which keeps outlines and a faint floor. <span class="status fixed">Fixed</span> Dark rooms now keep a faintly visible floor and outlined walls and cover.</p>
+</article>
+
+<article class="card m" id="n8">
+<div class="cardhead"><span class="num">N8</span><span class="sev m">Medium</span><span class="why">Why: observed</span><a class="back" href="#index">Back to index</a></div>
+<h3>Every held weapon was the same grey bar</h3>
+<p>The VIPER pistol, BREACHER shotgun and MANTIS SMG all rendered as an identical long grey bar, although the Armory screen had distinct weapon icons. <span class="status fixed">Fixed</span> Each weapon now has its own model in its accent colour. How they sit in the hands is N11.</p>
+</article>
+
+<article class="card m" id="n9">
+<div class="cardhead"><span class="num">N9</span><span class="sev m">Medium</span><span class="why">Why: confirmed</span><a class="back" href="#index">Back to index</a></div>
+<h3>The model tool cannot rig, and model rights are unknown</h3>
+<dl class="w">
+<dt>Who</dt><dd>Any project with characters, and anyone planning to ship one commercially.</dd>
+<dt>What</dt><dd>Characters (the player, Punk, Rifleman, Drone, ENFORCER MECH) come from Tripo as unrigged OBJ files. The builder says "the model tool can't rig". The package's manifest lists the models' commercial rights as an unresolved external release gate.</dd>
+<dt>Where</dt><dd>The model-generation step (up to 5 models per run) and the manifest's release gates.</dd>
+</dl>
+<h4>Impact</h4>
+<p>Animation depends on runtime procedural skinning (N10). A project can't enter a commercial competition or store until the rights question is settled.</p>
+<h4>Suggested fix</h4>
+<p>Offer rigging as part of model generation (Tripo has its own auto-rigging), generate humanoids in a neutral A-pose, and state the licence terms for generated models in the manifest.</p>
+</article>
+
+<article class="card h" id="n10">
+<div class="cardhead"><span class="num">N10</span><span class="sev h">High</span><span class="why">Why: observed; root cause read from the code</span><a class="back" href="#index">Back to index</a></div>
+<h3>Runtime skinning weights vertices by height and side only, so the coat follows the hands</h3>
+<dl class="w">
+<dt>Who</dt><dd>Every rigged character, most visibly the player in his long coat.</dd>
+<dt>What</dt><dd>Parts of the coat front are pulled forward whenever the arms move to aim or fire.</dd>
+<dt>Where</dt><dd><code>CharacterRig.cs</code>. Arm weight is a smoothstep on a vertex's sideways distance (<code>armInner</code>–<code>armOuter</code>) times a height band down to <code>armLow</code>. The player's profile sets the arm band at 25–33% of height to the side and reaching down to <code>armLow = 0.18</code>, about knee height.</dd>
+<dt>Why</dt><dd>Depth is ignored, so every coat vertex at shoulder width between knee and shoulder gets arm weight and moves with the hands.</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>Weight arms by distance from the shoulder-to-hand line (a capsule that includes depth), and weight coat and torso vertices to spine and hips. Apply it to every humanoid profile.</p>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> Fixed per the builder: arm weights now come from capsules around each arm, and the Punk and Rifleman also get leg capsules so jackets stay on the hips. The Netrunner Queen is not rigged: she is one mesh with her throne and hair, so any rig would bend the throne with her; she animates as a whole. Pending a visual check in play.</div>
+<div class="note"><strong>Update, 26 Oct (creator playtest):</strong> Better but not fixed. In play the coat hem still bulges toward the aim side, visible in a screen recording. The likely remaining cause is the upper-body aim twist moving vertices below the waist.</div>
+<div class="note"><strong>Update, 27 Oct (run 3):</strong> Coat vertices below the belt (142) now follow the hips only. The builder checked this by skin weights and close-up captures. It could not compare against the creator’s clip, which never reached it (N33). Pending a visual check.</div>
+</article>
+
+<article class="card m" id="n11">
+<div class="cardhead"><span class="num">N11</span><span class="sev m">Medium</span><span class="why">Why: observed</span><a class="back" href="#index">Back to index</a></div>
+<h3>Weapons sit unnaturally, and the off-hand holds a dual-wield pose</h3>
+<p>Weapons float slightly off the hands rather than gripped at a palm socket, and before the AKIMBO implant is taken both arms still point outward as if dual-wielding. Suggested fix: a grip socket per weapon aligned to the palm, off-hand IK to a foregrip on long guns, a relaxed or support pose for one-handed weapons, and the dual-extended pose only with AKIMBO.</p>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> Fixed per the builder: grip, foregrip and muzzle sockets, two-handed long guns and holsters. It also found and fixed a bug where socket names matched mesh-part names, so the hand had attached to a part’s centre instead of the grip socket. Pending a visual check in play.</div>
+</article>
+
+<article class="card h" id="n12">
+<div class="cardhead"><span class="num">N12</span><span class="sev h">High</span><span class="why">Why: measured in play; values read from the project</span><a class="back" href="#index">Back to index</a></div>
+<h3>Default balance shipped trivial</h3>
+<dl class="w">
+<dt>Who</dt><dd>Every player of the fix-pass build.</dd>
+<dt>What</dt><dd>The creator's run had 8 implants (4 of them Legendary) by floor 7 at 10:42, plenty of currency, and could dash out of everything. The floor-5 boss's mechanics were fine but it was "far too easy".</dd>
+<dt>Where</dt><dd>
+  <ul>
+    <li><code>PlayerConfig</code>: <code>dashCharges 1</code> with <code>dashRecharge 0.6</code> s, effectively unlimited;</li>
+    <li><code>DifficultyConfig.floorGen</code>: <code>rewardImplant 0.5</code> with 3 main-path rooms per floor, about 1.5 implants per floor from doors alone, plus the Clinic and shop;</li>
+    <li>currency: enemies drop 3–8, <code>roomClearScrip 20</code>, <code>scripCache 80–120</code>;</li>
+    <li>pace: the boss arrived at about 7–8 minutes against the design target of 12–18.</li>
+  </ul>
+</dd>
+<dt>Why</dt><dd>The builder took the design document's starting numbers as given and listed balance as unverified, because its proof run used god mode (N13).</dd>
+</dl>
+<h4>Mitigation</h4>
+<p>Every value is in a ScriptableObject (see What worked), so the fix is a list of field changes. These are in the drafted notes, item 29.</p>
+<h4>Suggested fix</h4>
+<p>Run a balance pass with damage on (N13) and report pace (time to boss, implants held at the boss, death floor) against the design document's targets before delivering.</p>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> The note values are now on disk (the stopped run had written code but left the old values in the data). The builder’s five-run bot reached the floor-5 boss at 14.4–14.8 min with 2–4 implants, inside the targets. Scrip is still about 2–3× the target at the floor-4 shop. The builder applied the creator’s values exactly and left further changes to the creator, recommending halving enemy and elite drops.</div>
+<div class="note"><strong>Update, 26 Oct (creator playtest):</strong> Confirmed by a human run: died on floor 13 at 48:10 with 1,179 unspent Scrip, matching the bot. The same run paid +1,118 Data Shards (about 86 per floor), roughly a third of the whole Chop Doc tree from one run, so Shards need an audit too.</div>
+<div class="note"><strong>Update, 27 Oct (run 3):</strong> Shards fixed: the audit traced the excess to elites paying 3 each while elite chance climbs per floor (about 800 Shards on a 13-floor run). Elites now pay 1 (at most 3 per room) and a cleared combat room pays +3; measured 25.8 per floor. Scrip partly fixed: the floor-2 shop is on target (about 1 item), but the floor-4 shop still sees 448–807 Scrip (3–5 items against a target of 2). The builder named the remaining sources (Scrip caches and the dark-clear bonus) and proposed halving them, but left the decision to the creator. The bot now dies on floors 4–5 instead of beating the boss.</div>
+<div class="note"><strong>Update, 27 Oct (creator playtest of run 3):</strong> Still too high in human play: 3,682 Scrip held on floor 15. Shards look right: +550 over 20 floors. The builder’s run-3 proposal (halve the caches and the dark-clear bonus) is approved in the run-4 notes, plus shop prices rising 5% per floor from floor 5. Separately, the bot (dying on floors 4–5) and an experienced human (floor 20, four flawless boss kills) now bracket the difficulty widely; the bot is a weak-player floor, not a balance target.</div>
+<div class="note"><strong>Update, 28 Oct (run 4):</strong> Partly met, and the builder explained why. With the requested changes, a bot that buys at every shop still held 3,155 Scrip by floor 15. The builder added one rule beyond the notes (from floor 6, Scrip per kill is scaled so a floor pays no more than floor 5 did), which cut the peak to 1,053 against the target of about 600. The remaining peak comes from floors 9–11 having no shop. The builder named the two options (add a shop there, or pay less and sell fewer items) and left the choice to the creator. This was good handling of a target the notes made impossible.</div>
+</article>
+
+<article class="card h" id="n13">
+<div class="cardhead"><span class="num">N13</span><span class="sev h">High</span><span class="why">Why: confirmed from the build log</span><a class="back" href="#index">Back to index</a></div>
+<h3>The end-to-end proof run used god mode</h3>
+<dl class="w">
+<dt>What</dt><dd>The fix pass's headline check, a scripted run from the hub through floors 1–4 to the floor-5 boss, ran with the player invulnerable "so the bot could finish". The builder's notes list balance and "a browser play-through past the first wave" as not verified.</dd>
+<dt>Where</dt><dd>The full-run playtest in the build log.</dd>
+<dt>Why</dt><dd>A scripted bot can't survive real damage, so the run proves the flow works but not that the game is playable.</dd>
+</dl>
+<h4>Impact</h4>
+<p>Damage, deaths, difficulty and pace go untested until the creator plays, which is how N12 reached the creator.</p>
+<h4>Suggested fix</h4>
+<p>Add a second bot mode with damage on and a simple survival policy (take cover, dash on telegraphs). Report its death floor and time to boss across several seeds.</p>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> Fixed on request. The builder wrote a no-god-mode balance bot that plays five runs through real input as a cautious new player (strafes, dashes out of melee, uses FRAG and EMP, flanks, takes every reward, buys nothing) and reported death floors, time to boss and implants. It only exists because the notes asked for it; it should be standard.</div>
+</article>
+
+<article class="card h" id="n14">
+<div class="cardhead"><span class="num">N14</span><span class="sev h">High</span><span class="why">Why: confirmed from the build log</span><a class="back" href="#index">Back to index</a></div>
+<h3>Browser verification is headless Chromium only</h3>
+<dl class="w">
+<dt>What</dt><dd>The WebGL build was checked in headless Chromium: it boots, reaches the hub, starts floor 1, and wave 1 spawns. Real browsers and phones were not tested: the builder lists "frame rate on real browsers and phones" and the Chop Doc and Armory sequences on touch as unverified.</dd>
+<dt>Impact</dt><dd>Both mobile problems the creator found on the first phone test (N6, N15) and the touch overlap (N16) could not have shown up in this lane.</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>Add a real-device lane (iOS Safari and Android Chrome), even as a single smoke run per build, that reports fps, frame time and a screenshot with the host overlay visible.</p>
+</article>
+
+<article class="card h" id="n15">
+<div class="cardhead"><span class="num">N15</span><span class="sev h">High</span><span class="why">Why: observed (heat); cause inferred from settings</span><a class="back" href="#index">Back to index</a></div>
+<h3>Smooth on an iPhone, but it gets very hot</h3>
+<dl class="w">
+<dt>Who</dt><dd>Phone players; tested on an iPhone 18 Pro Max in Safari.</dd>
+<dt>What</dt><dd>The game ran smoothly, but the phone got very hot within one session.</dd>
+<dt>Where</dt><dd>
+  <ul>
+    <li>The capture is 2576 × 1186, so the canvas renders at native device pixel ratio (3×), about 9× the pixels of a 1× canvas;</li>
+    <li>no frame-rate target is set, so the game renders as fast as the browser allows (the screen is 120 Hz);</li>
+    <li>the URP asset uses render scale 1.0, a 2048 shadow map and HDR bloom, with no mobile quality tier.</li>
+  </ul>
+</dd>
+<dt>Why</dt><dd>Desktop rendering settings applied to a phone. The phone has the headroom to stay smooth, at a thermal cost.</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>Cap the loader's device pixel ratio on mobile (about 1.5), set a 60 fps cap with a 30 fps battery-saver option, add a mobile quality tier (render scale 0.75, 1024 shadows, half-resolution bloom), and expose GRAPHICS and FRAME RATE settings. These are notes item 32.</p>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> Implemented: a GRAPHICS setting (LOW / MEDIUM / HIGH) and FRAME RATE setting (60, or 30 battery saver), phones defaulting to the mobile tier with emissive neon, and the canvas pixel ratio capped at 1.5 on phones and 2 on desktop (measured in the browser build: 1920×1200 for a 960×600 frame at device pixel ratio 3). Crowded-room frame rate on a phone is still unmeasured.</div>
+<div class="note"><strong>Update, 28 Oct (creator playtest of run 4):</strong> <span class="status fixed">Fixed (human-confirmed)</span> On the creator’s iPhone after run 4: the heat problem seems gone, and MANTIS with AKIMBO runs "far, far better".</div>
+</article>
+
+<article class="card m" id="n16">
+<div class="cardhead"><span class="num">N16</span><span class="sev m">Medium</span><span class="why">Why: observed</span><a class="back" href="#index">Back to index</a></div>
+<h3>Nimble's browser controls cover the game's RELOAD button</h3>
+<dl class="w">
+<dt>What</dt><dd>On a phone in the browser, the host's sound, restart and fullscreen controls sit in the bottom-right corner, on top of the game's lowest action button (RELOAD).</dd>
+<dt>Where</dt><dd>The overlap between the host page's overlay and the game's touch layout.</dd>
+<dt>Why</dt><dd>The builder generated a touch layout without reserving the space its own host UI takes.</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>Publish the overlay's footprint as a safe area the game can read (or that the builder applies automatically), and include the overlay in touch-layout verification.</p>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> Mitigated. The touch buttons now start above a reserved bottom-right corner, but the builder could not measure its own host’s sound, restart and fullscreen bar and used an estimate (168 × 64 CSS px), adjustable in one value. That the builder can’t see Nimble’s overlay is itself the gap.</div>
+</article>
+
+<article class="card m" id="n17">
+<div class="cardhead"><span class="num">N17</span><span class="sev m">Medium</span><span class="why">Why: confirmed (build log and player settings)</span><a class="back" href="#index">Back to index</a></div>
+<h3>The WebGL build is about 75 MB, uncompressed, with caching off</h3>
+<p>The final build was <code>WebGLBuild.wasm</code> 51.9 MB plus <code>WebGLBuild.data</code> 22.9 MB. The player settings have <code>webGLCompressionFormat: 2</code> (disabled), <code>webGLDataCaching: 0</code> and the default managed stripping level. Every visit downloads the full build again, which matters most on mobile data. Compression may be off because of how Nimble hosts builds; if so, that constraint should be stated. Suggested fix: Brotli (or Gzip with decompression fallback), data caching on, and higher managed stripping with a <code>link.xml</code> for reflection-dependent types.</p>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> Answered by the builder: the host requires compression off and data caching off, and the project’s web rules keep the stripping level. This is a platform constraint, not a project setting. The 26 Oct build is 25.8 MB data plus 52 MB wasm.</div>
+</article>
+
+<article class="card l" id="n18">
+<div class="cardhead"><span class="num">N18</span><span class="sev l">Low</span><span class="why">Why: inferred from settings</span><a class="back" href="#index">Back to index</a></div>
+<h3>Gameplay lights plus neon can exceed the per-object light limit</h3>
+<p>The URP asset uses the Forward path with <code>m_AdditionalLightsPerObjectLimit: 8</code>. The fix pass added up to 6 pooled muzzle and impact lights on top of room neon point lights, so a crowded fight can push some objects past 8, and the extra lights pop on and off. Not yet observed. Suggested fix: neon as emissive plus bloom, with real point lights kept for gameplay.</p>
+<div class="note"><strong>Update, 27 Oct (creator playtest of run 3):</strong> Now observed: the game lags heavily under full-auto MANTIS fire (12 shots per second, each with a light, impact flash, casing and damage number). Asked for profiling with before and after frame times.</div>
+<div class="note"><strong>Update, 28 Oct (run 4):</strong> Root cause of the MANTIS lag found, and it wasn’t lighting. Every MANTIS hit triggered hitstop, so the game was frozen 31% of the time under full-auto fire (50% with AKIMBO), while script time stayed at 1.3–1.7 ms per frame. Hitstop now applies only to crits (at most every 0.6 s), and frozen time is down to 2%. Pooled lights are capped at 3 per weapon. The per-object light limit described above has still not been observed causing problems, so this entry goes back to Low and inferred.</div>
+<div class="note"><strong>Update, 28 Oct (creator playtest of run 4):</strong> Confirmed by the creator on PC and iPhone: the "drop in frame rate feeling" with MANTIS is gone.</div>
+</article>
+
+<article class="card m" id="n19">
+<div class="cardhead"><span class="num">N19</span><span class="sev m">Medium</span><span class="why">Why: confirmed</span><a class="back" href="#index">Back to index</a></div>
+<h3>The Unity export leaves out the builder's design and build notes</h3>
+<dl class="w">
+<dt>What</dt><dd>The build log shows the builder working from a <code>NimbleFox/</code> folder in the workspace (<code>AGENTS.md</code>, <code>Design/BUILD-NOTES.md</code>, the design package). The downloaded <code>unity-project.zip</code> contains only <code>Assets</code>, <code>Packages</code> and <code>ProjectSettings</code>.</dd>
+<dt>Impact</dt><dd>A creator continuing the project locally loses the design record, the acceptance evidence and the departures list. They survive only inside a 16,691-line build log.</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>Include <code>NimbleFox/</code> in the export, or offer it as a separate download.</p>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> The 26 Oct export (1,057 files under Assets) still has no <code>NimbleFox/</code> folder, although the builder’s summary points the creator to <code>NimbleFox/Design/BUILD-NOTES.md</code> for details.</div>
+<div class="note"><strong>Update, 27 Oct (run 3):</strong> The 27 Oct export (1,069 files) still omits <code>NimbleFox/</code>, now 43 MB in the workspace and holding the full build-notes history.</div>
+<div class="note"><strong>Update, 28 Oct (run 4):</strong> The run-4 export (1,075 files) still has no <code>NimbleFox/</code> folder.</div>
+</article>
+
+<article class="card m" id="n20">
+<div class="cardhead"><span class="num">N20</span><span class="sev m">Medium</span><span class="why">Why: observed</span><a class="back" href="#index">Back to index</a></div>
+<h3>The prompt box caps around 6,000–8,000 characters</h3>
+<p>The initial brief had to be trimmed to fit, and the later note sets (36 items) are longer than the box. <strong>Worked around:</strong> the builder accepts file attachments, so the full design document (about 40,000 characters) went in as a Markdown file with two reference images, and the text box carried a short pointer to it. Suggested fix: document the limit in the box itself, and suggest attaching a file when a prompt exceeds it.</p>
+</article>
+
+<article class="card m" id="n21">
+<div class="cardhead"><span class="num">N21</span><span class="sev m">Medium</span><span class="why">Why: observed</span><a class="back" href="#index">Back to index</a></div>
+<h3>No cost estimate before a run, and credits ran out mid-project</h3>
+<dl class="w">
+<dt>What</dt><dd>We saw no estimate of what "build the full game" or "add notes" would cost before choosing between them. After the design package, the slice and one fix pass the account was at 6% of its vouchers, and the full build is blocked.</dd>
+<dt>Impact</dt><dd>The creator can't plan a run sequence (slice, fix pass, full build, balance pass) against a budget. Here it stopped the project between a working slice and the full game, and the full-build run then ran out partway through (N27). The labelling is also inconsistent: the run panel said "Your Nimble Fox voucher has been used up" while the balance underneath read "15% of your Chroma Awards voucher left". Per the creator, these are one balance: access is currently through the Chroma Awards, and vouchers from Nimble top up the Chroma Awards percentage. One name for one balance would avoid the confusion.</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>Show a cost range before each action, and the remaining budget expressed in runs ("about 1 full build or 3 fix passes left"). Consider a cheaper fix-only tier for note passes.</p>
+</article>
+
+<article class="card l" id="n22">
+<div class="cardhead"><span class="num">N22</span><span class="sev l">Low</span><span class="why">Why: confirmed</span><a class="back" href="#index">Back to index</a></div>
+<h3>Scope trade-offs are made without asking (but are reported)</h3>
+<p>Examples: AKIMBO was added by replacing MOMENTUM in the implant pool, with an icon drawn from MOMENTUM's art. Boss scaling was changed to a per-appearance formula, a reasonable reading for one repeating boss but wrong once three bosses cycle. Chop Doc surgery plays after the menu closes rather than during it. Each was listed under "Departures" or in the GDD, which is good practice. Suggested fix: when a departure changes the design document's content (removes an item, changes a formula), ask before applying, or flag it at the top of the completion summary.</p>
+<div class="note"><strong>Update, 27 Oct (run 3):</strong> Also confirmed: the builder cannot ask questions during a run ("Nobody can answer questions while you work: decide, record"). So any "ask before" instruction can only be honoured before the run starts. It reported the conflict and decided anyway, as designed. Its handling of the open economy choice was right: it left the Scrip values as given and proposed the fix rather than changing them.</div>
+</article>
+
+<article class="card m" id="n23">
+<div class="cardhead"><span class="num">N23</span><span class="sev m">Medium</span><span class="why">Why: observed</span><a class="back" href="#index">Back to index</a></div>
+<h3>Run summary text overlaps, and the pause menu shows through</h3>
+<p>In the Tab or pause run summary, implant descriptions that wrap to a second line run into the next entry (ARC ROUNDS into FOX FIRE, OVERLOAD into AKIMBO). When opened from pause, the pause menu's buttons show between the two summary panels. Suggested fix: variable row heights or a scroll list, and hide the pause root while the summary is open. This is the kind of issue a screenshot check with a full implant list would catch.</p>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> Fixed: summary rows size to their wrapped text in a scrolling list, and opened from Pause the summary has an opaque backdrop.</div>
+</article>
+
+<article class="card l" id="n24">
+<div class="cardhead"><span class="num">N24</span><span class="sev l">Low</span><span class="why">Why: observed</span><a class="back" href="#index">Back to index</a></div>
+<h3>Hub set dressing</h3>
+<ul>
+<li>The vending machine on the left wall faces the wall. <strong>Open.</strong></li>
+<li>The lamps read as floating white orbs with no cords or shades. <span class="status fixed">Fixed</span></li>
+<li>The stats board's text was unreadable at camera distance. <span class="status fixed">Fixed</span> It is larger and opens a stats panel.</li>
+</ul>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> Fixed: the cabinet (an arcade cabinet, not a vending machine) is rotated to face the room.</div>
+</article>
+
+<article class="card l" id="n25">
+<div class="cardhead"><span class="num">N25</span><span class="sev l">Low</span><span class="why">Why: observed</span><a class="back" href="#index">Back to index</a></div>
+<h3>The minimap did not mark the current room</h3>
+<p>In the first slice only the Tab summary showed the current room. <span class="status fixed">Fixed on desktop</span> (cyan fill). On iPhone the current room shows as a dark square with a cyan outline instead. <strong>Open on mobile.</strong></p>
+</article>
+
+<article class="card l" id="n26">
+<div class="cardhead"><span class="num">N26</span><span class="sev l">Low</span><span class="why">Why: confirmed from the build log</span><a class="back" href="#index">Back to index</a></div>
+<h3>URP-internal shaders log errors at startup in the browser</h3>
+<p><code>Hidden/CoreSRP/CoreCopy</code>, <code>StencilDitherMaskSeed</code> and <code>HDRDebugView</code> report "not supported" on WebGL at startup. The builder notes the game doesn't use them. They are harmless, but they put ERROR lines in every browser console, which hides real errors from anyone triaging a player's report. Suggested fix: strip these shaders from WebGL builds, or filter the known lines.</p>
+</article>
+
+<article class="card c" id="n27">
+<div class="cardhead"><span class="num">N27</span><span class="sev c">Critical</span><span class="why">Why: observed; cause inferred</span><a class="back" href="#index">Back to index</a></div>
+<h3>A run stopped by an empty voucher saved a half-applied build over the playable one</h3>
+<dl class="w">
+<dt>Who</dt><dd>Any creator whose voucher runs out partway through a run.</dd>
+<dt>What</dt><dd>The full-build run (notes 1–36) stopped after 310 steps when the voucher was used up. In the version it left behind, WASD don't move the player and the mouse doesn't move the aim reticle, so the game can't be played. The playable fix-pass build is no longer what the play link serves.</dd>
+<dt>When</dt><dd>25 Oct 2026, during the full-build run. The panel says Nimble Fox started playtests once; the last step was a command that ran for 7 min 49 s.</dd>
+<dt>Where</dt><dd>Run termination and versioning. The run panel shows three messages that don't agree:
+  <ul>
+    <li>a green <strong>Done</strong> badge;</li>
+    <li>"Nimble Fox stopped before finishing";</li>
+    <li>"Unfinished. Your Nimble Fox voucher has been used up, so this version holds what was made before it stopped", marked Saved.</li>
+  </ul>
+  The creator read it as a revert. The wording actually describes keeping the partial work, which fits what happened.</dd>
+<dt>Why</dt><dd>Inferred. Several notes change the player controller's systems (dash charges, weapon swap and pose, the JAMMED status), and a run cut off between dependent edits can leave input wiring broken. The partial state was then saved as the current version instead of the last build that had passed playtests.</dd>
+</dl>
+<h4>Impact</h4>
+<p>Credits were spent and the project ended worse than it started: from a playable slice to nothing playable. Playtesting is blocked until more credits arrive.</p>
+<h4>Mitigation</h4>
+<p>Download the stopped run's build log and project to see which notes were applied. When credits return, resume with a prompt that restores movement and aim first, verifies them with a playtest, then finishes the remaining notes, rather than resending the full note set onto a half-applied project.</p>
+<h4>Suggested fix</h4>
+<ul>
+  <li>Never replace the playable version with an unverified partial state. Keep the last version that passed playtests live, and keep partial work as a draft the creator can resume or discard.</li>
+  <li>Offer "restore previous version" after any interrupted run.</li>
+  <li>Before starting a run, warn when the remaining voucher may not cover it (N21), and stop at a safe point (a compiling, playtested state) rather than mid-change.</li>
+  <li>Show "Stopped (unfinished)" instead of a green Done badge.</li>
+</ul>
+<div class="note"><strong>Update, 26 Oct (recovery run):</strong> <span class="status fixed">Fixed</span> Root cause per the builder: the game’s generated data index had lost its link to the controls asset, so no gameplay input was bound. The interrupted run had written code but not regenerated the data, so the data on disk was stale: it also lacked the NETRUNNER QUEEN and CHROME TWINS (floors 10 and 15 would have crashed), four implant and upgrade records, and every new tuning value (dash was still 1 charge, 0.6 s). The builder regenerated the data and verified walking and aiming with real keyboard and mouse input. This sharpens the suggested fix: an interrupted run can leave code and data out of step, so a safe stopping point has to include data regeneration.</div>
+</article>
+
+<article class="card l" id="n28">
+<div class="cardhead"><span class="num">N28</span><span class="sev l">Low</span><span class="why">Why: confirmed (byte-for-byte comparison)</span><a class="back" href="#index">Back to index</a></div>
+<h3>The downloadable design package is never updated after a run</h3>
+<dl class="w">
+<dt>What</dt><dd>The package downloaded from the site after the fix pass and the interrupted full-build run (<code>blackout-district-0_1_0_1.zip</code>) is identical, file for file, to the one downloaded after the first slice run (<code>blackout-district-0_1_0.zip</code>): 358 files, 0 differences. Its GDD still describes slice 0.1.0 as READY_FOR_IMPLEMENTATION with no AKIMBO, no weapon swap and no COVER button, all of which the fix pass built.</dd>
+<dt>Impact</dt><dd>A creator who downloads the package to see where the project stands gets the original plan, not the current design, and it can't be used to tell what a run changed. Only the build log and the Unity project export show that.</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>Version the package with each run (0.1.1, 0.2.0…) and fold accepted notes into the GDD and its acceptance table, or label the download "original design package" and link the latest build notes beside it.</p>
+<div class="note"><strong>Update, 27 Oct (run 3):</strong> Cause confirmed: per the builder, "builds may not change the design package itself". Run 3 recorded the factory-robot setting in BUILD-NOTES.md instead. So the package’s full-game frame stays the original design until the creator attaches a new one, which matters for the "build the full game" action (N29).</div>
+</article>
+
+<article class="card l" id="n29">
+<div class="cardhead"><span class="num">N29</span><span class="sev l">Low</span><span class="why">Why: confirmed from the build log</span><a class="back" href="#index">Back to index</a></div>
+<h3>"Build the full game" stayed within slice scope</h3>
+<dl class="w">
+<dt>What</dt><dd>The run-2 note set opened with "BUILD THE FULL GAME" and listed full-game items. The builder applied the listed fixes and the bosses the notes named, but did not build Aspects, the three remaining weapons (LONGLINE, MONO-KATANA, SWARM), or the Shield Trooper, Sniper and Heavy, because the design package lists them as outside this build's scope.</dd>
+<dt>Where</dt><dd>The scope rule in the package: "Build exactly the slice… Section 1 is non-binding context."</dd>
+<dt>Why</dt><dd>The package's own scope rule outranked the instruction in the notes. It is not clear whether full-game scope requires the builder's dedicated "build the full game" action (offered after the first slice) rather than a note pass.</dd>
+<dt>Impact</dt><dd>A creator who believes they have paid for the full game gets an extended slice. Here the half-applied state (N27) added to the cost.</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>When notes ask for scope the package excludes, ask before the run whether to expand the package's scope, or point to the action that does. State the scope that will be built at the top of the run's plan.</p>
+<div class="note"><strong>Update, 26 Oct:</strong> Answered. After every iteration the builder offers a separate "build the full game from the current slice" action; a note pass never expands scope, whatever the notes say. This is working as designed. The remaining suggestion is to say so when a note set asks for full-game content, rather than quietly applying only the in-scope items.</div>
+</article>
+
+<article class="card m" id="n30">
+<div class="cardhead"><span class="num">N30</span><span class="sev m">Medium</span><span class="why">Why: observed (creator playtest, 26 Oct)</span><a class="back" href="#index">Back to index</a></div>
+<h3>Collision isn't enforced everywhere</h3>
+<dl class="w">
+<dt>What</dt><dd>
+  <ul>
+    <li>The player walks through the implant charging stations.</li>
+    <li>Drones sometimes fly through pillars.</li>
+    <li>FRAG and EMP pass through solid pillars and can land outside the map.</li>
+    <li>A grenade blast knocked an enemy through a locked door into the corridor; it appeared to clip back.</li>
+    <li>The ENFORCER charged into an EMP pylon and got stuck inside it.</li>
+  </ul>
+</dd>
+<dt>Why</dt><dd>Each object gets collision individually, not from one rule. The builder's playtests check flow and outcomes (rooms lock, enemies die, the boss falls), not physical containment, so none of these surfaced in a passing run.</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>One rule for every solid prop: a collider plus a NavMesh carve. Clamp knockback and thrown objects to the room's NavMesh and bounds. Add a containment check to the playtests: no character or projectile inside a solid or outside the room, sampled throughout the bot runs.</p>
+<div class="note"><strong>Update, 27 Oct (run 3):</strong> <span class="status fixed">Fixed</span> Each item has a containment test (pillar, wall, door and pylon checks). Verifying them found one more case, fixed too: a crowd could shove the player through a locked door, leaving the room uncleared forever. Pending human playtest.</div>
+<div class="note"><strong>Update, 28 Oct (creator playtest of run 4):</strong> Still incomplete. The player can walk through the power generators (Power Node and EMP pylons), and bullet holes appear above the visible top of some barriers. The second means the collider is taller than the mesh, so that cover also blocks shots where nothing is visible.</div>
+</article>
+
+<article class="card m" id="n31">
+<div class="cardhead"><span class="num">N31</span><span class="sev m">Medium</span><span class="why">Why: observed (creator playtest, 26 Oct)</span><a class="back" href="#index">Back to index</a></div>
+<h3>Enemy AI state bugs</h3>
+<dl class="w">
+<dt>What</dt><dd>Enemies spawned in a clump block one another and stop chasing the player. Elite Riflemen sometimes stand in line of sight without firing, typically after their cover is destroyed. More broadly, enemies use cover but rarely flank, and Punks are slow to attack once in range.</dd>
+<dt>Why</dt><dd>Likely a state with no exit when cover is lost, and no stuck detection for agents. The balance bot found a related case (a Rifleman it couldn't reach behind a crate) and recorded it as a bot problem rather than a possible AI bug.</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>An idle watchdog (any enemy with line of sight that hasn't acted for 2 s re-enters Attack), stuck detection with re-pathing, and a playtest that asserts every enemy attacks or moves within N seconds of seeing the player.</p>
+<div class="note"><strong>Update, 27 Oct (run 3):</strong> <span class="status fixed">Fixed</span> with root causes. The stare was a Rifleman retreating to the same damaged cover every frame, so he never fired. Frozen chasers came from comparing the goal with the agent’s own snapped destination, so the path stayed pending whenever the player stood off the NavMesh; this also explains the stalled bot rooms in N31’s original Why. Added: spawn separation, a 2 s idle watchdog, flankers, and a fallback that brings a cut-off enemy back in near the player within about 3 s.</div>
+<div class="note"><strong>Update, 27 Oct (creator playtest of run 3):</strong> Partly fixed. The run-3 test passed ("a Rifleman that loses cover fires"), but in human play Riflemen and the larger elites still won’t fire until they find new cover, so destroying every piece of cover makes them harmless. The test checked one Rifleman with other cover available; the human found the case with no cover left. The CHROME TWINS show the same class of bug: in the creator’s first fight KAGE dashed twice, then stood stuck for the rest of the battle; bosses have no idle watchdog. In run-4 notes.</div>
+<div class="note"><strong>Update, 28 Oct (run 4):</strong> Fixed per the builder, with tests: with every cover object destroyed, three Riflemen and two elites each fired within 1.0–1.9 s and kept firing while strafing. KAGE now dashes only along clear, walkable paths, verified across 10 Twins fights with 8–9 dashes each, and every boss has the 2 s idle watchdog. Pending the creator’s playtest.</div>
+<div class="note"><strong>Update, 28 Oct (creator playtest of run 4):</strong> KAGE’s fix passed its test and still failed in play. The run-4 test checked that he dashed 8–9 times per fight, and he did. In the creator’s fight he ran up, played his attack animations and showed his dash line, but never damaged a stationary player. The test measured activity, not effect. The Rifleman fix held: no complaints about Riflemen without cover.</div>
+</article>
+
+<article class="card l" id="n32">
+<div class="cardhead"><span class="num">N32</span><span class="sev l">Low</span><span class="why">Why: observed (creator playtest, 26 Oct)</span><a class="back" href="#index">Back to index</a></div>
+<h3>Presentation leftovers</h3>
+<ul>
+  <li>The HUD implant row runs off the right edge of the screen once a run has enough implants.</li>
+  <li>The operating-system mouse cursor draws on top of the aim reticle during play.</li>
+  <li>Bullet-hole decals stay floating in the air after the cover they hit is destroyed.</li>
+  <li>Green ammo crates are regularly placed in corridor doorways.</li>
+  <li>The implant chair's sit-down sequence plays in the hub but not in a run's Clinic rooms.</li>
+</ul>
+<p>None of these blocks play. Every one would show in a screenshot review of a long run, which the builder's checks don't include. The HUD overflow, for example, only appears with more implants than the playtests ever hold.</p>
+<div class="note"><strong>Update, 27 Oct (run 3):</strong> <span class="status fixed">Fixed</span> Implant row wraps (11 icons plus "+N"), cursor hidden in play, decals removed with their cover, a clear 2 m lane through every door, and the Clinic sequence plays in runs with every chair facing the camera. Portrait layouts are not captured.</div>
+<div class="note"><strong>Update, 27 Oct (creator playtest of run 3):</strong> New presentation and input leftovers, all in run-4 notes:<ul><li>the player clips into the implant chair while lying in it;</li><li>the drone STOMP prompt opens as a huge chat-box-like overlay;</li><li>the arm stays raised after leaving the Armory;</li><li>scrolling the run summary with the mouse wheel also swaps the weapon (input reaches gameplay while an overlay is open);</li><li>the shop’s Max HP item uses the medkit icon and reads like a heal.</li></ul></div>
+<div class="note"><strong>Update, 28 Oct (run 4):</strong> Fixed per the builder:<ul><li>the implant chair was rebuilt as a reclined chair, with no body point more than 1 cm inside it;</li><li>the huge STOMP overlay was a layout bug that stretched the tag across the screen;</li><li>the raised arm came from the reach pose only blending back while a station had control;</li><li>the mouse wheel no longer reaches gameplay while an overlay is open;</li><li>the Max HP item has its own icon and label.</li></ul></div>
+</article>
+
+<article class="card m" id="n33">
+<div class="cardhead"><span class="num">N33</span><span class="sev m">Medium</span><span class="why">Why: observed in the build log; creator to confirm what was uploaded</span><a class="back" href="#index">Back to index</a></div>
+<h3>Attachments can silently fail to reach the builder</h3>
+<dl class="w">
+<dt>What</dt><dd>
+  <ul>
+    <li><strong>Run 3:</strong> the creator attached a screen recording for note B8, but the builder's attachment folder (<code>Attachments/request-02/</code>) holds only the notes file. The builder said "the screen recording mentioned with B8 was not among the attachments" and verified B8 by skin weights instead.</li>
+    <li><strong>First request:</strong> the folder holds files numbered <code>02</code> (the style sheet) and <code>03</code> (the GDD), with no <code>01</code>. Three files were attached (the GDD, the style sheet and the HUD layout wireframe), so the HUD layout image probably never arrived.</li>
+  </ul>
+</dd>
+<dt>Why</dt><dd>Unknown. Video may not be an accepted type, or an upload may fail without an error. The upload UI gave no warning in either case.</dd>
+<dt>Impact</dt><dd>Notes that rely on an attachment are verified by other means without the creator knowing, unless they read the build log.</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>List the attachments the builder actually received at the start of each run, and reject unsupported types at upload with a visible error.</p>
+<div class="note"><strong>Update, 28 Oct (run 4):</strong> Run 4’s summary ended with "All attached files were usable", and its attachment folder held the one notes file sent. If this line now appears every run, it covers half of the suggested fix; it should also name the files received.</div>
+</article>
+
+<article class="card l" id="n34">
+<div class="cardhead"><span class="num">N34</span><span class="sev l">Low</span><span class="why">Why: observed (creator playtest, 28 Oct)</span><a class="back" href="#index">Back to index</a></div>
+<h3>FLAWLESS is awarded for boss fights where the player took damage</h3>
+<p>The results screen showed "3 FLAWLESS" after a run in which the creator took damage in every boss fight and nearly died to the Twins. The builder added the stat in run 3 or 4 and tested the boss-damage changes, but not whether the stat matches what happened. It’s a small bug, but a misleading one: the creator read the earlier FLAWLESS results as "bosses are too easy", and that shaped the boss notes in run 4.</p>
+<h4>Suggested fix</h4>
+<p>Define FLAWLESS as no HP or overshield damage during the fight, and test both outcomes.</p>
+</article>
+
+<article class="card m" id="n35">
+<div class="cardhead"><span class="num">N35</span><span class="sev m">Medium</span><span class="why">Why: observed by the creator on a second Nimble Fox project</span><a class="back" href="#index">Back to index</a></div>
+<h3>Upload limits are tight, and every message triggers a rebuild</h3>
+<dl class="w">
+<dt>Who</dt><dd>Any creator bringing their own assets (models, audio, textures) into a project. Found on the creator's second Nimble Fox game, an asset-heavy jam entry, not on BLACKOUT.</dd>
+<dt>What</dt><dd>
+  <ul>
+    <li>Uploads are limited to 32 MB per file, 10 files per prompt and 64 MB in total per prompt.</li>
+    <li>Splitting assets across several messages to stay under the limits triggers a full rebuild after each message, even when a message contains only file uploads and no instructions. Each rebuild costs credits and can change the project before the real prompt arrives.</li>
+  </ul>
+</dd>
+<dt>Where</dt><dd>The upload and message pipeline: any message starts a run, and there is no "don't build yet" or "stage files" option.</dd>
+<dt>Why</dt><dd>The builder treats every message as a request to build.</dd>
+</dl>
+<h4>Impact</h4>
+<p>Asset-heavy projects pay for unwanted intermediate builds, and those builds may act on half the assets. It adds to the budget problem (N21) and the size limits (N20).</p>
+<h4>Mitigation</h4>
+<p>Zip the assets to fit. If they still need more than one message, send all but the last batch, check what the intermediate rebuild changed, then send the final batch together with the full prompt. Better: plan uploads to fit in a single prompt.</p>
+<h4>Suggested fix</h4>
+<ul>
+  <li>Add an "upload only, don't build" option, or a staging area for files that the next prompt can use.</li>
+  <li>Show the limits in the upload UI, with a running total.</li>
+  <li>Accept larger archives (one zip of assets), or a link to an external asset store.</li>
+</ul>
+</article>
+
+<article class="card m" id="n36">
+<div class="cardhead"><span class="num">N36</span><span class="sev m">Medium</span><span class="why">Why: reported by the builder during a run on the creator's second project</span><a class="back" href="#index">Back to index</a></div>
+<h3>Tripo model textures imported as cubemaps, so props rendered flat</h3>
+<dl class="w">
+<dt>What</dt><dd>On the creator's second Nimble Fox project, Tripo-generated props looked flat and untextured. Mid-run, the builder found that their JPEG textures had been imported as <strong>cubemaps</strong>, so Unity couldn't assign them to the materials' 2D texture slots and the props fell back to plain colour. The builder repaired the fallback in the same run.</dd>
+<dt>Where</dt><dd>The import of generated models: texture import settings applied to Tripo's baseColor JPEGs.</dd>
+<dt>Why</dt><dd>Unknown: the import step can apparently assign the wrong texture shape. It doesn't happen every time. In BLACKOUT's run-4 export, all nine Tripo baseColor textures (player, enemies, bosses, EMP pylon) import correctly as 2D (<code>textureShape: 1</code>), so this project is unaffected.</dd>
+<dt>Impact</dt><dd>Generated models silently lose their textures, and the result looks like an art-style choice rather than a bug, so it's easy to miss. It also wastes a model-generation budget that is already small (up to 5 per run).</dd>
+</dl>
+<h4>Suggested fix</h4>
+<p>Force 2D texture import for every generated model texture, and add an asset check to the validator: every material slot on a generated model has a 2D texture assigned, with no fallback to flat colour.</p>
+<p>This also belongs in What worked: the builder caught the problem itself by noticing the props looked wrong, which is the kind of visual check N32 asks for.</p>
+</article>
+
+<h2 id="worked">What worked</h2>
+<ul>
+  <li><strong>File uploads in, full project out.</strong> The builder took a 40,000-character design document and two reference images as attachments, and later took screenshots. It exports the complete Unity project (Unity 6000.4.11f1, URP) and the full build log, so the game can be continued locally in Unity with Claude Code. This is the single most useful feature: nothing is locked in.</li>
+  <li><strong>Design package before code.</strong> Ultra Nimble produced a structured design package first: a generated GDD with decisions, open questions, acceptance IDs, a promote/iterate/stop decision for the slice, and named tuning levers. The open questions it raised (path length, key pacing, boss cadence) were the right ones.</li>
+  <li><strong>Reference renders that hold up.</strong> The generated target images (dark room, lit HUD) matched the supplied style sheet closely and gave a concrete bar to judge the build against.</li>
+  <li><strong>UI quality.</strong> Implant cards, Armory, Chop Doc, pause, run summary and results screens are polished, on-palette and match the reference images on the first try.</li>
+  <li><strong>Data-driven architecture, as asked.</strong> Every tunable is in a ScriptableObject (<code>PlayerConfig</code>, <code>DifficultyConfig</code>, <code>EconomyConfig</code>, per-enemy, per-weapon and per-implant assets). Game rules live in a separate logic layer with EditMode tests (11/11 pass). Balance fixes are field edits, not code changes.</li>
+  <li><strong>A slice-first workflow.</strong> Building a reduced slice (3 weapons, 3 enemies, 1 boss, 14 implants) before the full game kept the first broken build cheap to fix.</li>
+  <li><strong>Notes become working changes in one pass.</strong> The fix pass took about 16 notes and delivered all of them working: rooms that lock and spawn, Power Nodes, a cover button with vault, weapon swap with single-weapon reload, a new AKIMBO implant, muzzle and impact lighting that reveals enemies, a Chop Doc sit-down sequence, and hub fixes.</li>
+  <li><strong>Its verification finds real bugs.</strong> Input-driven playtests (keyboard, mouse and touch, landscape and portrait), a scripted run through the floor-5 boss and a headless WebGL check found three problems nobody had reported: crowds pushing the player through walls, a 200,000-damage stat from the boss's adds, and the player staying attached to cover after a teleport. The recovery run found two more: the boss arena unlocked at the start of every boss fight, and button presses were dropped on any frame longer than 0.12 s (verified fixed at 4 fps). All were fixed.</li>
+  <li><strong>Honest build notes.</strong> The completion summary explained why combat had never started and why its earlier tests missed it, listed what was not verified, and listed each departure from the design. That is the information a creator needs to decide what to test.</li>
+  <li><strong>Tester callouts.</strong> Asked for in run 3, the WHAT’S NEW overlay labels each change in-game with its note ID and what to check, and lists them all as SEEN or NEW in the pause menu. It turned playtesting from "find what changed" into a checklist. Worth using in every iteration and game jam.</li>
+  <li><strong>Touch controls for free.</strong> A full touch layer (twin sticks, a contextual COVER button) was generated alongside keyboard and mouse.</li>
+  <li><strong>Performance headroom.</strong> Smooth on a current iPhone, even at desktop settings (the cost shows up as heat, N15).</li>
+</ul>
+
+<h2 id="autopsy">Autopsy: building through a builder</h2>
+<p>Written by the reviewer (Claude), not by Nimble's builder, from the outside: the creator's playtests and screenshots, the build log and the exported project.</p>
+
+<h3>Scale of the work</h3>
+<ul>
+  <li><strong>Input:</strong> a 27-section, roughly 40,000-character design document, a palette and shading style sheet, and a HUD layout wireframe.</li>
+  <li><strong>Runs:</strong> a design package, a vertical slice, and one fix pass of about 16 notes.</li>
+  <li><strong>Output after the fix pass:</strong> 65 C# files (16,425 lines), 5 generated models, a WebGL build (about 75 MB), and 15+ playtests plus a scripted boss run.</li>
+  <li><strong>Creator testing:</strong> two desktop runs (the first found the slice had no combat; the second reached floor 7) and one iPhone session.</li>
+</ul>
+
+<h3>How this differs from Virtual Matter</h3>
+<p>On Virtual Matter the failures were in the engine: streaming, edits, and play clients the tools couldn't see. Here the engine (Unity) was never the problem. Every serious issue was a <strong>verification gap</strong>: the builder tested a different path from the one players use (teleport instead of walking, N3), a different state (god mode, N13), or a different platform (headless Chromium, N14). Each gap was exactly where the creator then found a problem. When the builder did test the real path, it found and fixed bugs on its own.</p>
+
+<h3>What got in the way</h3>
+<ol>
+  <li><strong>Completion without evidence (N2).</strong> The first "complete" had no working combat, and the promotion prompt would have spent the budget on it.</li>
+  <li><strong>The verification gaps above (N3, N13, N14).</strong></li>
+  <li><strong>Budget opacity (N21).</strong> With no cost per action, the creator couldn't plan for the full build, and the project paused between a working slice and the full game.</li>
+  <li><strong>An interrupted run broke the playable build (N27).</strong> Running out of credits mid-run should cost the unfinished work, not the last working version.</li>
+  <li><strong>Silent platform substitution (N1).</strong> A browser-only target is reasonable, but the creator should agree to it before paying for it.</li>
+  <li><strong>Characters (N9, N10, N11).</strong> Unrigged models with heuristic runtime skinning are the weakest visual layer, and the rights question blocks any commercial use.</li>
+</ol>
+
+<h3>Recommendations for Nimble Fox, ranked by how much they would have saved here</h3>
+<ol class="ranked">
+  <li><strong>Test the effect, not the activity.</strong> Several "fixed with a test" items failed in play because the test measured a stand-in: KAGE’s dash count instead of damage dealt (N31), and a pylon test that didn’t cover the generators (N30). For every combat behaviour, assert the outcome a player would feel: a stationary player in an attack’s path takes damage.</li>
+  <li><strong>Make verification match the player.</strong> Walk, don't teleport. Run one bot mode with damage on and report its death floor and pace. Add a real-device smoke run (iOS Safari, Android Chrome) with the host overlay visible. That alone would have caught N3, N6, N12, N15 and N16 before delivery.</li>
+  <li><strong>Gate "complete" on acceptance.</strong> Show the acceptance table next to the promotion prompt and warn when core-loop checks are pending (N2).</li>
+  <li><strong>Make interrupted runs safe.</strong> Keep the last playtested version live, save partial work as a resumable draft, and offer a one-click restore (N27).</li>
+  <li><strong>Show costs before each run,</strong> and the remaining budget in runs. Warn when a run may not fit the remaining voucher. Offer a cheaper fix-only tier for note passes (N21).</li>
+  <li><strong>Confirm platform overrides up front,</strong> and offer browser-storage saves for WebGL (N1).</li>
+  <li><strong>Mobile defaults:</strong> a device pixel ratio cap, a frame cap, a mobile quality tier and a published safe area for the host overlay (N15, N16, N18).</li>
+  <li><strong>Rigging in the model step,</strong> plus licence terms for generated models (N9, N10).</li>
+  <li><strong>Include <code>NimbleFox/</code> in the export</strong> (N19), and compress and cache WebGL builds where hosting allows (N17).</li>
+  <li><strong>Ask before departures that change the design's content</strong> (N22).</li>
+  <li><strong>Document the prompt and upload limits and point to attachments,</strong> and offer an upload-only option that doesn’t start a build (N20, N35).</li>
+  <li><strong>Round-trip:</strong> a way to upload a locally edited project back into the builder, so local fixes and builder runs don't diverge. Not tested here; listed as an open question.</li>
+</ol>
+
+<h3>Bottom line</h3>
+<p>Nimble Fox's builder is strong at the parts that are usually slow: turning a long design document into a structured plan, a polished UI, a clean data-driven architecture, and working features from a page of notes, with honest notes about what it did. Where it breaks is the last step, proving the build works for a real player on a real device. Close that gap, make the cost of each run visible, and the creator's role shrinks to what it should be: deciding whether the game is fun.</p>
+
+<h2 id="changelog">Changelog</h2>
+<ul>
+  <li><strong>29 Oct 2026:</strong> N36 added (Tripo textures imported as cubemaps on the second project; BLACKOUT checked and unaffected). N35 added (upload limits; every message triggers a rebuild), observed on a second Nimble Fox project. The game is now titled BLACKOUT.</li>
+  <li><strong>28 Oct 2026 (creator playtest of run 4):</strong> N34 added. N30 and N31 reopened in part. N15 confirmed fixed on iPhone. New ranked recommendation: test the effect, not the activity.</li>
+  <li><strong>28 Oct 2026 (run 4):</strong> N18 root cause (hitstop, not lighting) and back to Low. N31 and N32 fixed with tests, pending playtest. N12 partly met with the builder’s explanation. N33 and N19 updated.</li>
+  <li><strong>27 Oct 2026 (creator playtest of run 3):</strong> N31 reopened in part (Riflemen without cover, Twins stuck). N32 new items. N18 observed and raised to Medium. N12 updated. Tester callouts added to What worked.</li>
+  <li><strong>27 Oct 2026 (run 3):</strong> N30–N32 fixed with tests; N31 root causes found. N12 Shards fixed, floor-4 Scrip still high. N28 cause and N22 constraint confirmed by the builder. N33 added. Current state rewritten.</li>
+  <li><strong>26 Oct 2026:</strong> N29 answered (full scope is a separate builder action) and downgraded to Low.</li>
+  <li><strong>26 Oct 2026 (creator playtest):</strong> N30–N32 added. N10 and N12 updated from a floor-13 run.</li>
+  <li><strong>26 Oct 2026 (recovery run):</strong> N27 fixed with root cause. N29 added. Status updates to N6, N10–N13, N15–N17, N19, N23 and N24 from the recovery run's build log and export. Current state rewritten.</li>
+  <li><strong>26 Oct 2026:</strong> N28 (the downloadable design package is identical to the first slice's). N27 status: recovery run in progress. N21: the two voucher labels are one balance.</li>
+  <li><strong>25 Oct 2026:</strong> N27 (the full-build run ran out of voucher after 310 steps; the saved partial version has no working movement or aim). Current state, N21, the autopsy and the recommendations updated.</li>
+  <li><strong>25 Oct 2026 (first edition):</strong> N1–N26 from the design package, the first slice, the fix pass, two desktop playtests, one iPhone playtest, the fix-pass build log and the exported Unity project. Project paused at 6% of vouchers pending a new voucher.</li>
+</ul>
+
+<footer>
+Compiled by Claude (Opus 5.5) as an outside reviewer of Nimble Fox's builder, from the creator's playtests, screenshots, the build log and the exported Unity project, 25 Oct 2026. Previous reports in this series: <a href="https://ohge-games.github.io/virtual-matter-breakage-report/scar/">Virtual Matter, SCAR edition</a>.
+</footer>
+</div>
+
+<button class="themebtn" type="button" id="themebtn" aria-label="Toggle light or dark theme">Theme</button>
+<script>
+(function(){
+  var root=document.documentElement,btn=document.getElementById('themebtn');
+  try{var s=localStorage.getItem('nf-report-theme');if(s)root.setAttribute('data-theme',s);}catch(e){}
+  btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    var next=cur==='dark'?'light':'dark';root.setAttribute('data-theme',next);
+    try{localStorage.setItem('nf-report-theme',next);}catch(e){}
+  });
+})();
+</script>
+</body>
+</html>
