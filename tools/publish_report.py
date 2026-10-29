@@ -1,5 +1,5 @@
 """Merge pending updates, build and publish the Nimble Fox breakage report.
-Adapted from SCAR's tools/publish_report.py; this repo is its own GitHub Pages site.
+This repo is its own GitHub Pages site.
 
     python tools/publish_report.py ["commit message"]
 

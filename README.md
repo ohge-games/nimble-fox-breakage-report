@@ -2,8 +2,7 @@
 
 Where the Nimble Fox web builder breaks, collected across game builds (BLACKOUT, formerly BLACKOUT DISTRICT, and Salvage Diver).
 Published at https://ohge-games.github.io/nimble-fox-breakage-report/ (GitHub Pages, `main`, root).
-Same 5W format and pipeline as the [Virtual Matter reports](https://ohge-games.github.io/virtual-matter-breakage-report/);
-the tools are adapted from SCAR's `tools/build_report.py` and `tools/publish_report.py`.
+Each entry uses the 5W format: Who / What / When / Where / Why, then impact, mitigation and suggested fix.
 
 | Path | What it is |
 |---|---|
@@ -14,7 +13,7 @@ the tools are adapted from SCAR's `tools/build_report.py` and `tools/publish_rep
 | `builds/` | Build-log summaries, one file per run. |
 | `archive/` | The hand-written first edition the source was converted from. |
 | `tools/` | `build_report.py`, `merge_update.py`, `publish_report.py` (Python 3, no packages). |
-| `templates/report.css` | The Virtual Matter report stylesheet, plus a status pill. |
+| `templates/report.css` | The report stylesheet, plus a status pill. |
 
 Everything here is public.
 

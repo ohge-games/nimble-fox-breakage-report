@@ -1,6 +1,6 @@
-"""Build index.html from REPORT.md in the Virtual Matter report style.
-Adapted from SCAR's tools/build_report.py: same card format and CSS, with the page chrome
-(title, h1, facts, footer) moved into front matter and the sections rendered in source order.
+"""Build index.html from REPORT.md (5W cards, report stylesheet).
+The page chrome (title, h1, facts, footer) comes from front matter, and the sections render
+in source order.
 
     python tools/build_report.py [--check] [REPORT.md]
 

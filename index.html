@@ -141,7 +141,7 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
   <div class="eyebrow">First edition · Two game builds, BLACKOUT (cover-shooter roguelike, formerly BLACKOUT DISTRICT) and Salvage Diver (asset-heavy jam entry) · last updated 29 Oct 2026 · 36 breakages (3 critical · 10 high · 14 medium · 9 low)</div>
   
   <h1>Where Nimble Fox breaks: issues found across game builds</h1>
-  <p class="lede">Issues found while building games entirely through the Nimble Fox web builder, collected across builds. N1–N34 come from BLACKOUT (formerly BLACKOUT DISTRICT), an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk) built in Ultra Nimble mode; N35 and N36 come from Salvage Diver, a second, asset-heavy jam entry. Same 5W format as the Virtual Matter reports (<a href="https://ohge-games.github.io/virtual-matter-breakage-report/scar/">SCAR edition</a>): Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… Unlike the Virtual Matter projects, the agent doing the building here is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.</p>
+  <p class="lede">Issues found while building games entirely through the Nimble Fox web builder, collected across builds. N1–N34 come from BLACKOUT (formerly BLACKOUT DISTRICT), an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk) built in Ultra Nimble mode; N35 and N36 come from Salvage Diver, a second, asset-heavy jam entry. Each entry uses the 5W format: Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… The agent doing the building is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.</p>
   <div class="facts">
     <span>Projects <b>BLACKOUT (N1–N34), Salvage Diver (N35–N36)</b></span>
     <span>Builder <b>Nimble Fox web builder, Ultra Nimble mode</b></span>
@@ -605,8 +605,8 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
     <li><b>Output after the fix pass:</b> 65 C# files (16,425 lines), 5 generated models, a WebGL build (about 75 MB), and 15+ playtests plus a scripted boss run.</li>
     <li><b>Creator testing:</b> two desktop runs (the first found the slice had no combat; the second reached floor 7) and one iPhone session.</li>
   </ul>
-  <h3>How this differs from Virtual Matter</h3>
-  <p>On Virtual Matter the failures were in the engine: streaming, edits, and play clients the tools couldn't see. Here the engine (Unity) was never the problem. Every serious issue was a <b>verification gap</b>: the builder tested a different path from the one players use (teleport instead of walking, N3), a different state (god mode, N13), or a different platform (headless Chromium, N14). Each gap was exactly where the creator then found a problem. When the builder did test the real path, it found and fixed bugs on its own.</p>
+  <h3>Where it broke</h3>
+  <p>The engine (Unity) was never the problem. Every serious issue was a <b>verification gap</b>: the builder tested a different path from the one players use (teleport instead of walking, N3), a different state (god mode, N13), or a different platform (headless Chromium, N14). Each gap was exactly where the creator then found a problem. When the builder did test the real path, it found and fixed bugs on its own.</p>
   <h3>What got in the way</h3>
   <ol class="plain">
     <li><b>Completion without evidence (N2).</b> The first "complete" had no working combat, and the promotion prompt would have spent the budget on it.</li>
@@ -650,5 +650,5 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
     <li><b>25 Oct 2026 (first edition):</b> N1–N26 from the design package, the first slice, the fix pass, two desktop playtests, one iPhone playtest, the fix-pass build log and the exported Unity project. Project paused at 6% of vouchers pending a new voucher.</li>
   </ul>
 </section>
-<footer class="mono">Compiled by Claude (Opus 5.5) as an outside reviewer of Nimble Fox's builder, from the creator's playtests, screenshots, the build log and the exported Unity project, 25 Oct 2026. Previous reports in this series: <a href="https://ohge-games.github.io/virtual-matter-breakage-report/scar/">Virtual Matter, SCAR edition</a>.</footer>
+<footer class="mono">Compiled by Claude (Opus 5.5) as an outside reviewer of Nimble Fox's builder, from the creator's playtests, screenshots, the build log and the exported Unity project, 25 Oct 2026.</footer>
 </div></body></html>

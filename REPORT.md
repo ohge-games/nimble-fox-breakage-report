@@ -12,11 +12,11 @@ facts:
   - Target: Unity WebGL, keyboard/mouse and touch
   - 3D models: Tripo, OBJ, up to 5 per run
   - BLACKOUT runs: Design package, vertical slice, one fix pass, full build (stopped unfinished), recovery run
-footer: Compiled by Claude (Opus 5.5) as an outside reviewer of Nimble Fox's builder, from the creator's playtests, screenshots, the build log and the exported Unity project, 25 Oct 2026. Previous reports in this series: [Virtual Matter, SCAR edition](https://ohge-games.github.io/virtual-matter-breakage-report/scar/).
+footer: Compiled by Claude (Opus 5.5) as an outside reviewer of Nimble Fox's builder, from the creator's playtests, screenshots, the build log and the exported Unity project, 25 Oct 2026.
 ---
 # Nimble Fox breakage report
 
-Issues found while building games entirely through the Nimble Fox web builder, collected across builds. N1–N34 come from BLACKOUT (formerly BLACKOUT DISTRICT), an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk) built in Ultra Nimble mode; N35 and N36 come from Salvage Diver, a second, asset-heavy jam entry. Same 5W format as the Virtual Matter reports ([SCAR edition](https://ohge-games.github.io/virtual-matter-breakage-report/scar/)): Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… Unlike the Virtual Matter projects, the agent doing the building here is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.
+Issues found while building games entirely through the Nimble Fox web builder, collected across builds. N1–N34 come from BLACKOUT (formerly BLACKOUT DISTRICT), an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk) built in Ultra Nimble mode; N35 and N36 come from Salvage Diver, a second, asset-heavy jam entry. Each entry uses the 5W format: Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… The agent doing the building is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.
 
 ## Current state {#state}
 - **Run 3 delivered; creator playtest pending.** All 25 run-3 notes (sections A–H) were reported done, each with a named test. Nothing from the parked list was built. The work order and per-section save points from the prompt were followed: data regenerated, compiled and playtested after each section, with snapshots kept.
@@ -461,8 +461,8 @@ Written by the reviewer (Claude), not by Nimble's builder, from the outside: the
 - **Output after the fix pass:** 65 C# files (16,425 lines), 5 generated models, a WebGL build (about 75 MB), and 15+ playtests plus a scripted boss run.
 - **Creator testing:** two desktop runs (the first found the slice had no combat; the second reached floor 7) and one iPhone session.
 
-### How this differs from Virtual Matter
-On Virtual Matter the failures were in the engine: streaming, edits, and play clients the tools couldn't see. Here the engine (Unity) was never the problem. Every serious issue was a **verification gap**: the builder tested a different path from the one players use (teleport instead of walking, N3), a different state (god mode, N13), or a different platform (headless Chromium, N14). Each gap was exactly where the creator then found a problem. When the builder did test the real path, it found and fixed bugs on its own.
+### Where it broke
+The engine (Unity) was never the problem. Every serious issue was a **verification gap**: the builder tested a different path from the one players use (teleport instead of walking, N3), a different state (god mode, N13), or a different platform (headless Chromium, N14). Each gap was exactly where the creator then found a problem. When the builder did test the real path, it found and fixed bugs on its own.
 
 ### What got in the way
 1. **Completion without evidence (N2).** The first "complete" had no working combat, and the promotion prompt would have spent the budget on it.
