@@ -128,3 +128,21 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
 .w5 dd ul.plain, .extra ul.plain { margin-top: 4px; }
 .update { background: var(--code-bg); border-left: 3px solid var(--accent); border-radius: 4px; padding: 10px 14px; }
 .update p { max-width: none; }
+/* index sort and severity filter (templates/index.js) */
+.idx-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.idx-tools[hidden] { display: none; }
+.idx-filter { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; min-height: 32px; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+.chip b { font-weight: 500; color: var(--muted); margin-left: 4px; }
+.chip[data-sev="crit"] { color: var(--sev-crit); }
+.chip[data-sev="high"] { color: var(--sev-high); }
+.chip[data-sev="med"] { color: var(--sev-med); }
+.chip[data-sev="low"] { color: var(--sev-low); }
+.chip:hover { border-color: var(--muted); }
+.chip[aria-pressed="true"] { border-color: currentColor; background: var(--code-bg); box-shadow: inset 0 0 0 1px currentColor; }
+.idx-count { color: var(--muted); font-size: 0.78rem; }
+th button.sort { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+th button.sort .arr { opacity: 0.45; }
+th[aria-sort] button.sort { color: var(--fg); }
+th[aria-sort] button.sort .arr { opacity: 1; }
+.chip:focus-visible, th button.sort:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

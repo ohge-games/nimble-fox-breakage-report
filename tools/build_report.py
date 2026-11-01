@@ -26,13 +26,14 @@ import html, os, re, sys, datetime
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
-from reportlib import CARD, SEVLINE, FIELD, read, chunks, heading, table_rows
+from reportlib import CARD, SEVLINE, FIELD, read, chunks, heading, num, table_rows
 
 args = [a for a in sys.argv[1:] if not a.startswith("--")]
 CHECK = "--check" in sys.argv
 SRC = args[0] if args else os.path.join(ROOT, "REPORT.md")
 fm, md = read(SRC)
 css = open(os.path.join(ROOT, "templates", "report.css"), encoding="utf-8").read()
+js = open(os.path.join(ROOT, "templates", "index.js"), encoding="utf-8").read()
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n'
          '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500'
          '&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">')
@@ -233,8 +234,13 @@ updated = fm.get("updated") or datetime.datetime.now().strftime("%d %b %Y")
 eyebrow = " · ".join(x for x in (fm.get("edition"), fm.get("subject"), "last updated " + updated) if x)
 facts = "\n".join("    <span>%s <b>%s</b></span>" % (inline(k.strip()), inline(v.strip()))
                   for k, _, v in (f.partition(": ") for f in fm.get("facts", [])))
-rows = "\n".join('        <tr><td class="mono">%s</td><td><span class="sev %s">%s</span></td><td><a href="#%s">%s</a></td><td>%s</td></tr>'
-                 % (r[0], SEV.get(r[1].lower(), "med"), r[1], r[0].lower(), inline(r[2]), inline(r[3])) for r in idx_rows)
+# data-n / data-sev / data-rank drive the index sort and severity filter (templates/index.js)
+RANK = {"crit": 0, "high": 1, "med": 2, "low": 3}
+chips = "\n".join('      <button type="button" class="chip" data-sev="%s" aria-pressed="false">%s <b>%d</b></button>'
+                  % (SEV[k.lower()], k, counts[k]) for k in ("Critical", "High", "Medium", "Low") if k in counts)
+rows = "\n".join('        <tr data-n="%d" data-sev="%s" data-rank="%d"><td class="mono">%s</td><td><span class="sev %s">%s</span></td><td><a href="#%s">%s</a></td><td>%s</td></tr>'
+                 % (num(r[0]), s, RANK[s], r[0], s, r[1], r[0].lower(), inline(r[2]), inline(r[3]))
+                 for r, s in ((r, SEV.get(r[1].lower(), "med")) for r in idx_rows))
 out = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>%s</title>
@@ -255,6 +261,13 @@ out = """<!doctype html>
 %s
 <section id="index">
   <h2>Breakage index</h2>
+  <div class="idx-tools" hidden>
+    <div class="idx-filter" role="group" aria-label="Filter by severity">
+      <button type="button" class="chip" data-sev="" aria-pressed="true">All <b>%d</b></button>
+%s
+    </div>
+    <span class="idx-count mono" aria-live="polite"></span>
+  </div>
   <div class="table-scroll"><table>
     <thead><tr><th>#</th><th>Severity</th><th>Breakage</th><th>Status</th></tr></thead>
     <tbody>
@@ -268,11 +281,14 @@ out = """<!doctype html>
 %s
 %s
 <footer class="mono">%s</footer>
-</div></body></html>
+</div>
+<script>
+%s</script>
+</body></html>
 """ % (html.escape(fm.get("title", "Breakage report")), FONTS, css, html.escape(eyebrow), len(idx_rows), tally,
        '<div class="final-status">%s</div>' % inline(fm["status"]) if fm.get("status") else "",
-       inline(fm.get("h1", "")), inline(" ".join(intro)), facts, "\n".join(above), rows, "\n".join(cards),
-       "\n".join(below), log_html, inline(fm.get("footer", "")))
+       inline(fm.get("h1", "")), inline(" ".join(intro)), facts, "\n".join(above), len(idx_rows), chips, rows,
+       "\n".join(cards), "\n".join(below), log_html, inline(fm.get("footer", "")), js)
 dst = os.path.join(ROOT, "index.html")
 open(dst, "w", encoding="utf-8", newline="\n").write(out)
 print("wrote", dst, len(out), "bytes,", len(cards), "cards,", len(idx_rows), "index rows")

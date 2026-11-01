@@ -14,6 +14,7 @@ Each entry uses the 5W format: Who / What / When / Where / Why, then impact, mit
 | `archive/` | The hand-written first edition the source was converted from. |
 | `tools/` | `build_report.py`, `merge_update.py`, `publish_report.py` (Python 3, no packages). |
 | `templates/report.css` | The report stylesheet, plus a status pill. |
+| `templates/index.js` | Sort (by # or severity) and severity filter for the breakage index; inlined into the page. Without JavaScript the index shows every row in ID order. |
 
 Everything here is public.
 

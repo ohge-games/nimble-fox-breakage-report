@@ -134,6 +134,24 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
 .w5 dd ul.plain, .extra ul.plain { margin-top: 4px; }
 .update { background: var(--code-bg); border-left: 3px solid var(--accent); border-radius: 4px; padding: 10px 14px; }
 .update p { max-width: none; }
+/* index sort and severity filter (templates/index.js) */
+.idx-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.idx-tools[hidden] { display: none; }
+.idx-filter { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; min-height: 32px; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+.chip b { font-weight: 500; color: var(--muted); margin-left: 4px; }
+.chip[data-sev="crit"] { color: var(--sev-crit); }
+.chip[data-sev="high"] { color: var(--sev-high); }
+.chip[data-sev="med"] { color: var(--sev-med); }
+.chip[data-sev="low"] { color: var(--sev-low); }
+.chip:hover { border-color: var(--muted); }
+.chip[aria-pressed="true"] { border-color: currentColor; background: var(--code-bg); box-shadow: inset 0 0 0 1px currentColor; }
+.idx-count { color: var(--muted); font-size: 0.78rem; }
+th button.sort { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+th button.sort .arr { opacity: 0.45; }
+th[aria-sort] button.sort { color: var(--fg); }
+th[aria-sort] button.sort .arr { opacity: 1; }
+.chip:focus-visible, th button.sort:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 </style>
 </head><body>
 <div class="wrap">
@@ -163,46 +181,56 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
 </section>
 <section id="index">
   <h2>Breakage index</h2>
+  <div class="idx-tools" hidden>
+    <div class="idx-filter" role="group" aria-label="Filter by severity">
+      <button type="button" class="chip" data-sev="" aria-pressed="true">All <b>37</b></button>
+      <button type="button" class="chip" data-sev="crit" aria-pressed="false">Critical <b>3</b></button>
+      <button type="button" class="chip" data-sev="high" aria-pressed="false">High <b>11</b></button>
+      <button type="button" class="chip" data-sev="med" aria-pressed="false">Medium <b>14</b></button>
+      <button type="button" class="chip" data-sev="low" aria-pressed="false">Low <b>9</b></button>
+    </div>
+    <span class="idx-count mono" aria-live="polite"></span>
+  </div>
   <div class="table-scroll"><table>
     <thead><tr><th>#</th><th>Severity</th><th>Breakage</th><th>Status</th></tr></thead>
     <tbody>
-        <tr><td class="mono">N1</td><td><span class="sev high">High</span></td><td><a href="#n1">The platform's fixed requirements overrode the brief (no PC build, no gamepad, no persistent save) without a pre-spend prompt</a></td><td>By design; designed around</td></tr>
-        <tr><td class="mono">N2</td><td><span class="sev high">High</span></td><td><a href="#n2">"Vertical slice complete" was reported while every acceptance check was still pending, and combat did not work</a></td><td>Fixed in the fix pass</td></tr>
-        <tr><td class="mono">N3</td><td><span class="sev crit">Critical</span></td><td><a href="#n3">Combat rooms never started: no doors, no enemies, wave counter stuck at 1/2, every room open</a></td><td>Fixed and verified (11/11 rooms)</td></tr>
-        <tr><td class="mono">N4</td><td><span class="sev crit">Critical</span></td><td><a href="#n4">Power Nodes, the core light/dark mechanic, were absent or could not be activated</a></td><td>Fixed</td></tr>
-        <tr><td class="mono">N5</td><td><span class="sev high">High</span></td><td><a href="#n5">The player character rendered as a translucent cyan smear (x-ray layer over his own body)</a></td><td>Fixed on desktop</td></tr>
-        <tr><td class="mono">N6</td><td><span class="sev high">High</span></td><td><a href="#n6">On iOS Safari the cyan smear is back while the character is in the open</a></td><td>Fix applied; unverified on iPhone</td></tr>
-        <tr><td class="mono">N7</td><td><span class="sev high">High</span></td><td><a href="#n7">Dark rooms were unreadable: floor, walls and cover nearly invisible</a></td><td>Fixed</td></tr>
-        <tr><td class="mono">N8</td><td><span class="sev med">Medium</span></td><td><a href="#n8">Every held weapon was the same grey bar</a></td><td>Fixed (per-weapon models)</td></tr>
-        <tr><td class="mono">N9</td><td><span class="sev med">Medium</span></td><td><a href="#n9">The model tool cannot rig; models arrive as unrigged OBJs with unknown commercial rights</a></td><td>Open; release gate</td></tr>
-        <tr><td class="mono">N10</td><td><span class="sev high">High</span></td><td><a href="#n10">Runtime skinning weights vertices by height and side only, so the coat follows the hands</a></td><td>Fix applied; needs visual check</td></tr>
-        <tr><td class="mono">N11</td><td><span class="sev med">Medium</span></td><td><a href="#n11">Weapons sit unnaturally in the hands, and the off-hand holds a dual-wield pose without the dual-wield implant</a></td><td>Fixed (grip sockets); needs visual check</td></tr>
-        <tr><td class="mono">N12</td><td><span class="sev high">High</span></td><td><a href="#n12">Default balance shipped trivial: effectively unlimited dashes, an implant most rooms, too much currency</a></td><td>Mostly fixed; creator decision pending</td></tr>
-        <tr><td class="mono">N13</td><td><span class="sev high">High</span></td><td><a href="#n13">The end-to-end proof run used god mode; balance and damage were never exercised</a></td><td>Fixed on request (no-god-mode bot)</td></tr>
-        <tr><td class="mono">N14</td><td><span class="sev high">High</span></td><td><a href="#n14">Browser verification is headless Chromium only; no real browser or phone run before delivery</a></td><td>Tooling gap</td></tr>
-        <tr><td class="mono">N15</td><td><span class="sev high">High</span></td><td><a href="#n15">The build runs smoothly on an iPhone but makes it very hot: native pixel ratio, no frame cap, desktop quality</a></td><td>Fixed (confirmed on iPhone)</td></tr>
-        <tr><td class="mono">N16</td><td><span class="sev med">Medium</span></td><td><a href="#n16">Nimble's own browser controls cover the game's RELOAD touch button</a></td><td>Fixed by the platform (controls moved out of the viewer)</td></tr>
-        <tr><td class="mono">N17</td><td><span class="sev med">Medium</span></td><td><a href="#n17">The WebGL build is about 75 MB, uncompressed, with data caching off</a></td><td>Host constraint (confirmed)</td></tr>
-        <tr><td class="mono">N18</td><td><span class="sev low">Low</span></td><td><a href="#n18">Up to 6 pooled gameplay lights plus neon can exceed the Forward path's 8 lights per object</a></td><td>Lag was hitstop (fixed); light limit still inferred</td></tr>
-        <tr><td class="mono">N19</td><td><span class="sev med">Medium</span></td><td><a href="#n19">The Unity project export leaves out the builder's design and build-notes folder</a></td><td>Still missing in the 26 Oct export</td></tr>
-        <tr><td class="mono">N20</td><td><span class="sev med">Medium</span></td><td><a href="#n20">The prompt box caps around 6,000–8,000 characters</a></td><td>Worked around (attachments)</td></tr>
-        <tr><td class="mono">N21</td><td><span class="sev med">Medium</span></td><td><a href="#n21">No cost estimate before a run; credits ran out mid-project</a></td><td>Open</td></tr>
-        <tr><td class="mono">N22</td><td><span class="sev low">Low</span></td><td><a href="#n22">The builder makes scope trade-offs without asking first (it does report them)</a></td><td>Documented</td></tr>
-        <tr><td class="mono">N23</td><td><span class="sev med">Medium</span></td><td><a href="#n23">Run summary text overlaps, and the pause menu shows through it</a></td><td>Fixed</td></tr>
-        <tr><td class="mono">N24</td><td><span class="sev low">Low</span></td><td><a href="#n24">Hub set dressing: a vending machine faces the wall, lamps floated without fixtures, stats board unreadable</a></td><td>Fixed</td></tr>
-        <tr><td class="mono">N25</td><td><span class="sev low">Low</span></td><td><a href="#n25">The minimap did not mark the current room; on mobile it shows an outline instead of a fill</a></td><td>Fixed on desktop; open on mobile</td></tr>
-        <tr><td class="mono">N26</td><td><span class="sev low">Low</span></td><td><a href="#n26">URP-internal shaders log errors in the browser console at startup</a></td><td>Documented by the builder</td></tr>
-        <tr><td class="mono">N27</td><td><span class="sev crit">Critical</span></td><td><a href="#n27">A run stopped by an empty voucher saved a half-applied build over the playable one: WASD and mouse aim no longer work</a></td><td>Fixed (root cause: stale data index)</td></tr>
-        <tr><td class="mono">N28</td><td><span class="sev low">Low</span></td><td><a href="#n28">The downloadable design package is never updated after a run, so it contradicts the build</a></td><td>Confirmed</td></tr>
-        <tr><td class="mono">N29</td><td><span class="sev low">Low</span></td><td><a href="#n29">A note set headed "build the full game" was treated as a note pass within the slice's scope</a></td><td>Answered: full scope is a separate action</td></tr>
-        <tr><td class="mono">N30</td><td><span class="sev med">Medium</span></td><td><a href="#n30">Collision isn't enforced everywhere: walk-through props, drones and grenades through pillars, knockback through a locked door, the boss stuck in a pylon</a></td><td>Fixed (tests); pending playtest</td></tr>
-        <tr><td class="mono">N31</td><td><span class="sev med">Medium</span></td><td><a href="#n31">Enemy AI state bugs: spawn clumps that stop pursuing, elites that stand and stare after losing cover</a></td><td>Fixed (outcome-tested); pending playtest</td></tr>
-        <tr><td class="mono">N32</td><td><span class="sev low">Low</span></td><td><a href="#n32">Presentation leftovers: implant row runs off-screen, OS cursor over the reticle, floating decals, crates in doorways, Clinic animation only in the hub</a></td><td>Fixed; pending playtest</td></tr>
-        <tr><td class="mono">N33</td><td><span class="sev med">Medium</span></td><td><a href="#n33">Attachments can silently fail to reach the builder: the run-3 screen recording, and one of the three files from the first request</a></td><td>Observed; needs creator confirmation</td></tr>
-        <tr><td class="mono">N34</td><td><span class="sev low">Low</span></td><td><a href="#n34">FLAWLESS is awarded for boss fights where the player took damage</a></td><td>Fixed (tests); pending playtest</td></tr>
-        <tr><td class="mono">N35</td><td><span class="sev med">Medium</span></td><td><a href="#n35">Upload limits are tight, and every message triggers a rebuild, even one that only uploads files</a></td><td>Observed (second project); worked around</td></tr>
-        <tr><td class="mono">N36</td><td><span class="sev med">Medium</span></td><td><a href="#n36">Tripo model textures imported as cubemaps, so props rendered flat with no texture</a></td><td>Found and fixed by the builder (second project)</td></tr>
-        <tr><td class="mono">N37</td><td><span class="sev high">High</span></td><td><a href="#n37">A platform-side "serverOverloaded" error ended a run mid-section, and the half-done state was built and shipped anyway</a></td><td>Open; recovery pending</td></tr>
+        <tr data-n="1" data-sev="high" data-rank="1"><td class="mono">N1</td><td><span class="sev high">High</span></td><td><a href="#n1">The platform's fixed requirements overrode the brief (no PC build, no gamepad, no persistent save) without a pre-spend prompt</a></td><td>By design; designed around</td></tr>
+        <tr data-n="2" data-sev="high" data-rank="1"><td class="mono">N2</td><td><span class="sev high">High</span></td><td><a href="#n2">"Vertical slice complete" was reported while every acceptance check was still pending, and combat did not work</a></td><td>Fixed in the fix pass</td></tr>
+        <tr data-n="3" data-sev="crit" data-rank="0"><td class="mono">N3</td><td><span class="sev crit">Critical</span></td><td><a href="#n3">Combat rooms never started: no doors, no enemies, wave counter stuck at 1/2, every room open</a></td><td>Fixed and verified (11/11 rooms)</td></tr>
+        <tr data-n="4" data-sev="crit" data-rank="0"><td class="mono">N4</td><td><span class="sev crit">Critical</span></td><td><a href="#n4">Power Nodes, the core light/dark mechanic, were absent or could not be activated</a></td><td>Fixed</td></tr>
+        <tr data-n="5" data-sev="high" data-rank="1"><td class="mono">N5</td><td><span class="sev high">High</span></td><td><a href="#n5">The player character rendered as a translucent cyan smear (x-ray layer over his own body)</a></td><td>Fixed on desktop</td></tr>
+        <tr data-n="6" data-sev="high" data-rank="1"><td class="mono">N6</td><td><span class="sev high">High</span></td><td><a href="#n6">On iOS Safari the cyan smear is back while the character is in the open</a></td><td>Fix applied; unverified on iPhone</td></tr>
+        <tr data-n="7" data-sev="high" data-rank="1"><td class="mono">N7</td><td><span class="sev high">High</span></td><td><a href="#n7">Dark rooms were unreadable: floor, walls and cover nearly invisible</a></td><td>Fixed</td></tr>
+        <tr data-n="8" data-sev="med" data-rank="2"><td class="mono">N8</td><td><span class="sev med">Medium</span></td><td><a href="#n8">Every held weapon was the same grey bar</a></td><td>Fixed (per-weapon models)</td></tr>
+        <tr data-n="9" data-sev="med" data-rank="2"><td class="mono">N9</td><td><span class="sev med">Medium</span></td><td><a href="#n9">The model tool cannot rig; models arrive as unrigged OBJs with unknown commercial rights</a></td><td>Open; release gate</td></tr>
+        <tr data-n="10" data-sev="high" data-rank="1"><td class="mono">N10</td><td><span class="sev high">High</span></td><td><a href="#n10">Runtime skinning weights vertices by height and side only, so the coat follows the hands</a></td><td>Fix applied; needs visual check</td></tr>
+        <tr data-n="11" data-sev="med" data-rank="2"><td class="mono">N11</td><td><span class="sev med">Medium</span></td><td><a href="#n11">Weapons sit unnaturally in the hands, and the off-hand holds a dual-wield pose without the dual-wield implant</a></td><td>Fixed (grip sockets); needs visual check</td></tr>
+        <tr data-n="12" data-sev="high" data-rank="1"><td class="mono">N12</td><td><span class="sev high">High</span></td><td><a href="#n12">Default balance shipped trivial: effectively unlimited dashes, an implant most rooms, too much currency</a></td><td>Mostly fixed; creator decision pending</td></tr>
+        <tr data-n="13" data-sev="high" data-rank="1"><td class="mono">N13</td><td><span class="sev high">High</span></td><td><a href="#n13">The end-to-end proof run used god mode; balance and damage were never exercised</a></td><td>Fixed on request (no-god-mode bot)</td></tr>
+        <tr data-n="14" data-sev="high" data-rank="1"><td class="mono">N14</td><td><span class="sev high">High</span></td><td><a href="#n14">Browser verification is headless Chromium only; no real browser or phone run before delivery</a></td><td>Tooling gap</td></tr>
+        <tr data-n="15" data-sev="high" data-rank="1"><td class="mono">N15</td><td><span class="sev high">High</span></td><td><a href="#n15">The build runs smoothly on an iPhone but makes it very hot: native pixel ratio, no frame cap, desktop quality</a></td><td>Fixed (confirmed on iPhone)</td></tr>
+        <tr data-n="16" data-sev="med" data-rank="2"><td class="mono">N16</td><td><span class="sev med">Medium</span></td><td><a href="#n16">Nimble's own browser controls cover the game's RELOAD touch button</a></td><td>Fixed by the platform (controls moved out of the viewer)</td></tr>
+        <tr data-n="17" data-sev="med" data-rank="2"><td class="mono">N17</td><td><span class="sev med">Medium</span></td><td><a href="#n17">The WebGL build is about 75 MB, uncompressed, with data caching off</a></td><td>Host constraint (confirmed)</td></tr>
+        <tr data-n="18" data-sev="low" data-rank="3"><td class="mono">N18</td><td><span class="sev low">Low</span></td><td><a href="#n18">Up to 6 pooled gameplay lights plus neon can exceed the Forward path's 8 lights per object</a></td><td>Lag was hitstop (fixed); light limit still inferred</td></tr>
+        <tr data-n="19" data-sev="med" data-rank="2"><td class="mono">N19</td><td><span class="sev med">Medium</span></td><td><a href="#n19">The Unity project export leaves out the builder's design and build-notes folder</a></td><td>Still missing in the 26 Oct export</td></tr>
+        <tr data-n="20" data-sev="med" data-rank="2"><td class="mono">N20</td><td><span class="sev med">Medium</span></td><td><a href="#n20">The prompt box caps around 6,000–8,000 characters</a></td><td>Worked around (attachments)</td></tr>
+        <tr data-n="21" data-sev="med" data-rank="2"><td class="mono">N21</td><td><span class="sev med">Medium</span></td><td><a href="#n21">No cost estimate before a run; credits ran out mid-project</a></td><td>Open</td></tr>
+        <tr data-n="22" data-sev="low" data-rank="3"><td class="mono">N22</td><td><span class="sev low">Low</span></td><td><a href="#n22">The builder makes scope trade-offs without asking first (it does report them)</a></td><td>Documented</td></tr>
+        <tr data-n="23" data-sev="med" data-rank="2"><td class="mono">N23</td><td><span class="sev med">Medium</span></td><td><a href="#n23">Run summary text overlaps, and the pause menu shows through it</a></td><td>Fixed</td></tr>
+        <tr data-n="24" data-sev="low" data-rank="3"><td class="mono">N24</td><td><span class="sev low">Low</span></td><td><a href="#n24">Hub set dressing: a vending machine faces the wall, lamps floated without fixtures, stats board unreadable</a></td><td>Fixed</td></tr>
+        <tr data-n="25" data-sev="low" data-rank="3"><td class="mono">N25</td><td><span class="sev low">Low</span></td><td><a href="#n25">The minimap did not mark the current room; on mobile it shows an outline instead of a fill</a></td><td>Fixed on desktop; open on mobile</td></tr>
+        <tr data-n="26" data-sev="low" data-rank="3"><td class="mono">N26</td><td><span class="sev low">Low</span></td><td><a href="#n26">URP-internal shaders log errors in the browser console at startup</a></td><td>Documented by the builder</td></tr>
+        <tr data-n="27" data-sev="crit" data-rank="0"><td class="mono">N27</td><td><span class="sev crit">Critical</span></td><td><a href="#n27">A run stopped by an empty voucher saved a half-applied build over the playable one: WASD and mouse aim no longer work</a></td><td>Fixed (root cause: stale data index)</td></tr>
+        <tr data-n="28" data-sev="low" data-rank="3"><td class="mono">N28</td><td><span class="sev low">Low</span></td><td><a href="#n28">The downloadable design package is never updated after a run, so it contradicts the build</a></td><td>Confirmed</td></tr>
+        <tr data-n="29" data-sev="low" data-rank="3"><td class="mono">N29</td><td><span class="sev low">Low</span></td><td><a href="#n29">A note set headed "build the full game" was treated as a note pass within the slice's scope</a></td><td>Answered: full scope is a separate action</td></tr>
+        <tr data-n="30" data-sev="med" data-rank="2"><td class="mono">N30</td><td><span class="sev med">Medium</span></td><td><a href="#n30">Collision isn't enforced everywhere: walk-through props, drones and grenades through pillars, knockback through a locked door, the boss stuck in a pylon</a></td><td>Fixed (tests); pending playtest</td></tr>
+        <tr data-n="31" data-sev="med" data-rank="2"><td class="mono">N31</td><td><span class="sev med">Medium</span></td><td><a href="#n31">Enemy AI state bugs: spawn clumps that stop pursuing, elites that stand and stare after losing cover</a></td><td>Fixed (outcome-tested); pending playtest</td></tr>
+        <tr data-n="32" data-sev="low" data-rank="3"><td class="mono">N32</td><td><span class="sev low">Low</span></td><td><a href="#n32">Presentation leftovers: implant row runs off-screen, OS cursor over the reticle, floating decals, crates in doorways, Clinic animation only in the hub</a></td><td>Fixed; pending playtest</td></tr>
+        <tr data-n="33" data-sev="med" data-rank="2"><td class="mono">N33</td><td><span class="sev med">Medium</span></td><td><a href="#n33">Attachments can silently fail to reach the builder: the run-3 screen recording, and one of the three files from the first request</a></td><td>Observed; needs creator confirmation</td></tr>
+        <tr data-n="34" data-sev="low" data-rank="3"><td class="mono">N34</td><td><span class="sev low">Low</span></td><td><a href="#n34">FLAWLESS is awarded for boss fights where the player took damage</a></td><td>Fixed (tests); pending playtest</td></tr>
+        <tr data-n="35" data-sev="med" data-rank="2"><td class="mono">N35</td><td><span class="sev med">Medium</span></td><td><a href="#n35">Upload limits are tight, and every message triggers a rebuild, even one that only uploads files</a></td><td>Observed (second project); worked around</td></tr>
+        <tr data-n="36" data-sev="med" data-rank="2"><td class="mono">N36</td><td><span class="sev med">Medium</span></td><td><a href="#n36">Tripo model textures imported as cubemaps, so props rendered flat with no texture</a></td><td>Found and fixed by the builder (second project)</td></tr>
+        <tr data-n="37" data-sev="high" data-rank="1"><td class="mono">N37</td><td><span class="sev high">High</span></td><td><a href="#n37">A platform-side "serverOverloaded" error ended a run mid-section, and the half-done state was built and shipped anyway</a></td><td>Open; recovery pending</td></tr>
     </tbody></table></div>
 </section>
 <section id="cards">
@@ -675,4 +703,68 @@ nav.toc li { break-inside: avoid; padding: 2px 0; }
   </ul>
 </section>
 <footer class="mono">Compiled by Claude (Opus 5.5) as an outside reviewer of Nimble Fox's builder, from the creator's playtests, screenshots, the build log and the exported Unity project, 25 Oct 2026.</footer>
-</div></body></html>
+</div>
+<script>
+/* Breakage index: sort by # or severity, filter by severity. Only touches the index table;
+   without JavaScript the table stays in ID order with every row shown. */
+(function () {
+  var sec = document.getElementById("index");
+  if (!sec) return;
+  var tools = sec.querySelector(".idx-tools"), tbody = sec.querySelector("tbody");
+  var rows = [].slice.call(tbody.rows), chips = [].slice.call(tools.querySelectorAll(".chip"));
+  var count = tools.querySelector(".idx-count"), heads = sec.querySelectorAll("thead th");
+  var state = { key: "n", dir: 1, sevs: {} };  // dir 1: N1 first, or Critical first
+
+  var sorts = [[heads[0], "n", "Sort by number"], [heads[1], "rank", "Sort by severity"]].map(function (s) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "sort";
+    b.title = s[2];
+    b.innerHTML = s[0].innerHTML + '<span class="arr" aria-hidden="true"></span>';
+    s[0].textContent = "";
+    s[0].appendChild(b);
+    b.addEventListener("click", function () {
+      state.dir = state.key === s[1] ? -state.dir : 1;
+      state.key = s[1];
+      apply();
+    });
+    return { th: s[0], key: s[1], arr: b.lastChild };
+  });
+
+  chips.forEach(function (c) {
+    c.addEventListener("click", function () {
+      var s = c.dataset.sev;
+      if (!s) state.sevs = {};
+      else if (state.sevs[s]) delete state.sevs[s];
+      else state.sevs[s] = true;
+      apply();
+    });
+  });
+
+  function apply() {
+    var k = state.key, any = Object.keys(state.sevs).length > 0, shown = 0;
+    rows.sort(function (a, b) {
+      return (a.dataset[k] - b.dataset[k]) * state.dir || a.dataset.n - b.dataset.n;
+    });
+    rows.forEach(function (r) {
+      r.hidden = any && !state.sevs[r.dataset.sev];
+      if (!r.hidden) shown++;
+      tbody.appendChild(r);
+    });
+    chips.forEach(function (c) {
+      c.setAttribute("aria-pressed", c.dataset.sev ? !!state.sevs[c.dataset.sev] : !any);
+    });
+    sorts.forEach(function (s) {
+      var on = s.key === k;
+      if (on) s.th.setAttribute("aria-sort", state.dir === 1 ? (k === "n" ? "ascending" : "descending") : (k === "n" ? "descending" : "ascending"));
+      else s.th.removeAttribute("aria-sort");
+      s.arr.textContent = !on ? "↕" : (k === "n") === (state.dir === 1) ? "↑" : "↓";
+    });
+    count.textContent = any ? "Showing " + shown + " of " + rows.length : rows.length + " breakages";
+  }
+
+  tools.hidden = false;
+  apply();
+})();
+</script>
+</body></html>
