@@ -2,3 +2,4 @@
 2026-10-27-run-3.md
 2026-10-28-run-4.md
 2026-10-29-salvage-diver.md
+2026-10-31-full-game-build.md

@@ -3,7 +3,7 @@ title: Nimble Fox Breakage Report
 h1: Where Nimble Fox breaks: issues found across game builds
 edition: First edition
 subject: Two game builds, BLACKOUT (cover-shooter roguelike, formerly BLACKOUT DISTRICT) and Salvage Diver (asset-heavy jam entry)
-updated: 29 Oct 2026
+updated: 31 Oct 2026
 facts:
   - Projects: BLACKOUT (N1–N34), Salvage Diver (N35–N36)
   - Builder: Nimble Fox web builder, Ultra Nimble mode
@@ -19,11 +19,15 @@ footer: Compiled by Claude (Opus 5.5) as an outside reviewer of Nimble Fox's bui
 Issues found while building games entirely through the Nimble Fox web builder, collected across builds. N1–N34 come from BLACKOUT (formerly BLACKOUT DISTRICT), an isometric 3D cover-shooter roguelike (West of Dead cover, Hades-style unlocks, cel-shaded cyberpunk) built in Ultra Nimble mode; N35 and N36 come from Salvage Diver, a second, asset-heavy jam entry. Each entry uses the 5W format: Who / What / When / Where / Why, then impact, mitigation and suggested fix. IDs are N1, N2… The agent doing the building is Nimble's own; the creator supplies a design document and playtest notes. This report was compiled by a separate reviewer from the creator's playtests, screenshots, the builder's build log and the exported Unity project.
 
 ## Current state {#state}
-- **Run 3 delivered; creator playtest pending.** All 25 run-3 notes (sections A–H) were reported done, each with a named test. Nothing from the parked list was built. The work order and per-section save points from the prompt were followed: data regenerated, compiled and playtested after each section, with snapshots kept.
-- **Balance, by the bot** (god mode off, final batch of five): deaths on floors 4, 5 (at the ENFORCER), 4, 4, 4; boss reached at 14.6 min with 2 implants. Shards are on target at 25.8 per floor. The floor-2 shop is on target; the floor-4 shop is not (3–5 items affordable against a target of 2).
-- **Bosses, by the bot in god mode:** ENFORCER 52–56 s with the pylon bait, QUEEN 82–95 s (HP raised from 1,100 to 1,650 to match fight lengths).
-- **Not verified:** phone frame rate with the new flashlight and drone lights, portrait layouts, how the bosses and Punk attacks feel to a human, and B8 against the creator's clip (N33).
-- **Before "build the full game":** a human playtest of run 3, a small fix for the floor-4 Scrip, a phone check, and an updated full-game design to attach, because the builder cannot change the design package itself (N28).
+- **The full game is built (31 Oct).** "Build the full game", with a creator-written design document and the commercial script attached, delivered:
+  - the four-band Descent to THE NODE, the grand-prize ending, credits and AFTER DARK (Endless);
+  - 9 weapons, 6 grenades, 5 new robots and 3 unlockable contestants;
+  - signature and hybrid implants;
+  - the show layer: 473 script lines, of which 344 are captions awaiting voice, plus 35 music cues specified.
+  Every section was reported done except implants (12 of 15 unverified in play). 32/32 unit tests and 21/21 full-game playtests pass, and the WebGL build is 136 MB.
+- **Before this, the slice took seven passes** (runs 1–7, with one recovery run), each driven by a creator playtest and a note file.
+- **Next:** the creator's playtest of the full game on PC and phone; a voice batch for the 344 caption-only lines through the creator's own ElevenLabs pipeline; and creator-made music for the 35 cues, delivered in batches under the upload limits (N35).
+- **Unverified by the builder:** real phones (the build is now 136 MB, up from about 78 MB), audio by ear, a real 60–80 min win, 12 of the 15 new implants in play, and one economy-bot stall on floor 6.
 
 ## Index
 
@@ -44,7 +48,7 @@ Issues found while building games entirely through the Nimble Fox web builder, c
 | N13 | High | The end-to-end proof run used god mode; balance and damage were never exercised | Fixed on request (no-god-mode bot) |
 | N14 | High | Browser verification is headless Chromium only; no real browser or phone run before delivery | Tooling gap |
 | N15 | High | The build runs smoothly on an iPhone but makes it very hot: native pixel ratio, no frame cap, desktop quality | Fixed (confirmed on iPhone) |
-| N16 | Medium | Nimble's own browser controls cover the game's RELOAD touch button | Mitigated (estimated corner) |
+| N16 | Medium | Nimble's own browser controls cover the game's RELOAD touch button | Fixed by the platform (controls moved out of the viewer) |
 | N17 | Medium | The WebGL build is about 75 MB, uncompressed, with data caching off | Host constraint (confirmed) |
 | N18 | Low | Up to 6 pooled gameplay lights plus neon can exceed the Forward path's 8 lights per object | Lag was hitstop (fixed); light limit still inferred |
 | N19 | Medium | The Unity project export leaves out the builder's design and build-notes folder | Still missing in the 26 Oct export |
@@ -58,13 +62,14 @@ Issues found while building games entirely through the Nimble Fox web builder, c
 | N27 | Critical | A run stopped by an empty voucher saved a half-applied build over the playable one: WASD and mouse aim no longer work | Fixed (root cause: stale data index) |
 | N28 | Low | The downloadable design package is never updated after a run, so it contradicts the build | Confirmed |
 | N29 | Low | A note set headed "build the full game" was treated as a note pass within the slice's scope | Answered: full scope is a separate action |
-| N30 | Medium | Collision isn't enforced everywhere: walk-through props, drones and grenades through pillars, knockback through a locked door, the boss stuck in a pylon | Partly fixed; pylons and cover heights still wrong |
-| N31 | Medium | Enemy AI state bugs: spawn clumps that stop pursuing, elites that stand and stare after losing cover | Riflemen fixed; KAGE deals no damage (test measured dashes, not hits) |
+| N30 | Medium | Collision isn't enforced everywhere: walk-through props, drones and grenades through pillars, knockback through a locked door, the boss stuck in a pylon | Fixed (tests); pending playtest |
+| N31 | Medium | Enemy AI state bugs: spawn clumps that stop pursuing, elites that stand and stare after losing cover | Fixed (outcome-tested); pending playtest |
 | N32 | Low | Presentation leftovers: implant row runs off-screen, OS cursor over the reticle, floating decals, crates in doorways, Clinic animation only in the hub | Fixed; pending playtest |
 | N33 | Medium | Attachments can silently fail to reach the builder: the run-3 screen recording, and one of the three files from the first request | Observed; needs creator confirmation |
-| N34 | Low | FLAWLESS is awarded for boss fights where the player took damage | Open; in promotion fixes |
+| N34 | Low | FLAWLESS is awarded for boss fights where the player took damage | Fixed (tests); pending playtest |
 | N35 | Medium | Upload limits are tight, and every message triggers a rebuild, even one that only uploads files | Observed (second project); worked around |
 | N36 | Medium | Tripo model textures imported as cubemaps, so props rendered flat with no texture | Found and fixed by the builder (second project) |
+| N37 | High | A platform-side "serverOverloaded" error ended a run mid-section, and the half-done state was built and shipped anyway | Open; recovery pending |
 
 ---
 
@@ -231,6 +236,7 @@ Weapons float slightly off the hands rather than gripped at a palm socket, and b
 - **Why:** The builder generated a touch layout without reserving the space its own host UI takes.
 - **Suggested fix:** Publish the overlay's footprint as a safe area the game can read (or that the builder applies automatically), and include the overlay in touch-layout verification.
 - **Update, 26 Oct (recovery run):** Mitigated. The touch buttons now start above a reserved bottom-right corner, but the builder could not measure its own host’s sound, restart and fullscreen bar and used an estimate (168 × 64 CSS px), adjustable in one value. That the builder can’t see Nimble’s overlay is itself the gap.
+- **Update, 29 Oct:** {{Fixed by the platform}} Nimble Fox moved its sound, refresh and fullscreen controls out of the game viewer, so the bottom-right corner is no longer covered. That resolves this at the platform level for every project, which is the right place for it. The 168 × 64 px corner BLACKOUT reserved in run 4 can now be released.
 
 ## N17. The WebGL build is about 75 MB, uncompressed, with caching off
 **Medium. Why: confirmed (build log and player settings).**
@@ -257,6 +263,7 @@ The URP asset uses the Forward path with `m_AdditionalLightsPerObjectLimit: 8`. 
 - **Update, 26 Oct (recovery run):** The 26 Oct export (1,057 files under Assets) still has no `NimbleFox/` folder, although the builder’s summary points the creator to `NimbleFox/Design/BUILD-NOTES.md` for details.
 - **Update, 27 Oct (run 3):** The 27 Oct export (1,069 files) still omits `NimbleFox/`, now 43 MB in the workspace and holding the full build-notes history.
 - **Update, 28 Oct (run 4):** The run-4 export (1,075 files) still has no `NimbleFox/` folder.
+- **Update, 31 Oct (full-game build):** Partly worked around. The full-game build placed its voice script and music spec inside `Assets/Game/Design/`, so they are in the export. `NimbleFox/` itself, with the build notes, is still missing.
 
 ## N20. The prompt box caps around 6,000–8,000 characters
 **Medium. Why: observed.**
@@ -276,6 +283,7 @@ The initial brief had to be trimmed to fit, and the later note sets (36 items) a
 Examples: AKIMBO was added by replacing MOMENTUM in the implant pool, with an icon drawn from MOMENTUM's art. Boss scaling was changed to a per-appearance formula, a reasonable reading for one repeating boss but wrong once three bosses cycle. Chop Doc surgery plays after the menu closes rather than during it. Each was listed under "Departures" or in the GDD, which is good practice. Suggested fix: when a departure changes the design document's content (removes an item, changes a formula), ask before applying, or flag it at the top of the completion summary.
 
 - **Update, 27 Oct (run 3):** Also confirmed: the builder cannot ask questions during a run ("Nobody can answer questions while you work: decide, record"). So any "ask before" instruction can only be honoured before the run starts. It reported the conflict and decided anyway, as designed. Its handling of the open economy choice was right: it left the Scrip values as given and proposed the fix rather than changing them.
+- **Update, 29 Oct (run 5):** A new example of the no-questions rule biting. The run-5 notes referred to "Sentries", the full-game design’s new name for Riflemen, without defining it. The builder couldn’t ask, so it applied the depth scaling to the security Drone, and said so ("my assumption"). The note was ambiguous; the builder’s handling (decide, state the assumption) was right. The real failure is that there is no way to resolve an ambiguity before the run spends credits on it.
 
 ## N23. Run summary text overlaps, and the pause menu shows through
 **Medium. Why: observed.**
@@ -355,6 +363,7 @@ In the first slice only the Tab summary showed the current room. {{Fixed on desk
 - **Suggested fix:** One rule for every solid prop: a collider plus a NavMesh carve. Clamp knockback and thrown objects to the room's NavMesh and bounds. Add a containment check to the playtests: no character or projectile inside a solid or outside the room, sampled throughout the bot runs.
 - **Update, 27 Oct (run 3):** {{Fixed}} Each item has a containment test (pillar, wall, door and pylon checks). Verifying them found one more case, fixed too: a crowd could shove the player through a locked door, leaving the room uncleared forever. Pending human playtest.
 - **Update, 28 Oct (creator playtest of run 4):** Still incomplete. The player can walk through the power generators (Power Node and EMP pylons), and bullet holes appear above the visible top of some barriers. The second means the collider is taller than the mesh, so that cover also blocks shots where nothing is visible.
+- **Update, 29 Oct (run 5):** Fixed: pylons and conduits are carved out of the NavMesh, and the player never ends up inside them, walking or dashing. All 121 cover pieces now have colliders within 5 cm of their visible height. They had been fixed 1.6 m blocks, which explains both the floating bullet holes and the invisible cover.
 
 ## N31. Enemy AI state bugs
 **Medium. Why: observed (creator playtest, 26 Oct).**
@@ -366,6 +375,7 @@ In the first slice only the Tab summary showed the current room. {{Fixed on desk
 - **Update, 27 Oct (creator playtest of run 3):** Partly fixed. The run-3 test passed ("a Rifleman that loses cover fires"), but in human play Riflemen and the larger elites still won’t fire until they find new cover, so destroying every piece of cover makes them harmless. The test checked one Rifleman with other cover available; the human found the case with no cover left. The CHROME TWINS show the same class of bug: in the creator’s first fight KAGE dashed twice, then stood stuck for the rest of the battle; bosses have no idle watchdog. In run-4 notes.
 - **Update, 28 Oct (run 4):** Fixed per the builder, with tests: with every cover object destroyed, three Riflemen and two elites each fired within 1.0–1.9 s and kept firing while strafing. KAGE now dashes only along clear, walkable paths, verified across 10 Twins fights with 8–9 dashes each, and every boss has the 2 s idle watchdog. Pending the creator’s playtest.
 - **Update, 28 Oct (creator playtest of run 4):** KAGE’s fix passed its test and still failed in play. The run-4 test checked that he dashed 8–9 times per fight, and he did. In the creator’s fight he ran up, played his attack animations and showed his dash line, but never damaged a stationary player. The test measured activity, not effect. The Rifleman fix held: no complaints about Riflemen without cover.
+- **Update, 29 Oct (run 5):** KAGE fixed, with the root cause: each dash checked the NavMesh at his body height, about 0.5 m too high, so every dash ended on its first frame. Run 4’s test ran in god mode, which hid it. With the run-5 rule (a standing player in the attack’s path, god mode off), KAGE hit 12 of 12 dashes, and every attack of all three bosses now damages a standing player. The builder also found a new Rifleman stall (bouncing between two pieces of cover that couldn’t see the player) and fixed it.
 
 ## N32. Presentation leftovers
 **Low. Why: observed (creator playtest, 26 Oct).**
@@ -402,6 +412,7 @@ None of these blocks play. Every one would show in a screenshot review of a long
 - **Impact:** Notes that rely on an attachment are verified by other means without the creator knowing, unless they read the build log.
 - **Suggested fix:** List the attachments the builder actually received at the start of each run, and reject unsupported types at upload with a visible error.
 - **Update, 28 Oct (run 4):** Run 4’s summary ended with "All attached files were usable", and its attachment folder held the one notes file sent. If this line now appears every run, it covers half of the suggested fix; it should also name the files received.
+- **Update, 31 Oct (full-game build):** Both attachments sent with the full-game request arrived. The summary’s closing "Attached files" section names each file and how it was used, which is the confirmation this card asked for.
 
 ## N34. FLAWLESS is awarded for boss fights where the player took damage
 **Low. Why: observed (creator playtest, 28 Oct).**
@@ -409,6 +420,7 @@ None of these blocks play. Every one would show in a screenshot review of a long
 The results screen showed "3 FLAWLESS" after a run in which the creator took damage in every boss fight and nearly died to the Twins. The builder added the stat in run 3 or 4 and tested the boss-damage changes, but not whether the stat matches what happened. It’s a small bug, but a misleading one: the creator read the earlier FLAWLESS results as "bosses are too easy", and that shaped the boss notes in run 4.
 
 - **Suggested fix:** Define FLAWLESS as no HP or overshield damage during the fight, and test both outcomes.
+- **Update, 29 Oct (run 5):** Fixed. Cause: one flawless fight flagged the whole run as FLAWLESS. It is now per fight, and JAMMED’s overshield drain alone still counts as flawless.
 
 ## N35. Upload limits are tight, and every message triggers a rebuild
 **Medium. Why: observed by the creator on a second Nimble Fox project.**
@@ -436,6 +448,20 @@ The results screen showed "3 FLAWLESS" after a run in which the creator took dam
 - **Suggested fix:** Force 2D texture import for every generated model texture, and add an asset check to the validator: every material slot on a generated model has a 2D texture assigned, with no fallback to flat colour.
   This also belongs in What worked: the builder caught the problem itself by noticing the props looked wrong, which is the kind of visual check N32 asks for.
 
+## N37. A server error ended a run mid-section, and the half-done state was built anyway
+**High. Why: confirmed from the build log (run 6).**
+
+- **What:**
+  - Run 6 ended "Unfinished" with `{"cause": "agent_turn", "agentError": "serverOverloaded"}`: Nimble Fox's own backend failed. This was not a voucher, compile or game error.
+  - The run had already been interrupted and resumed twice ("continuing from the saved audio checkpoint…"). Sections A–D were complete, each with a snapshot (the last was `04-D-rifleman.tar.gz`). Section E (sponsor commercials) was mid-edit, and F and G hadn't started.
+  - After the failure, the platform still refreshed and built the workspace as it stood, including the unfinished, uncheckpointed section-E changes, instead of reverting to the last snapshot.
+- **Why:** Platform capacity. The build-after-failure step doesn't know about the project's own checkpoints.
+- **Impact:** Same class as N27: credits are spent, and the playable version may be in an intermediate state. This time the creator's interruption-safety rules (a snapshot per section) limited the damage: everything through section D is verified, and the run recorded where to resume.
+- **Suggested fix:**
+  - After an agent failure, build from the last state that passed the project's checks, not the live workspace.
+  - Retry or resume automatically after transient backend errors, without charging for repeated work.
+  - Show "Stopped: server error" rather than the same "Unfinished" status used for an exhausted voucher.
+
 ---
 
 ## What worked {#worked}
@@ -448,7 +474,9 @@ The results screen showed "3 FLAWLESS" after a run in which the creator took dam
 - **Notes become working changes in one pass.** The fix pass took about 16 notes and delivered all of them working: rooms that lock and spawn, Power Nodes, a cover button with vault, weapon swap with single-weapon reload, a new AKIMBO implant, muzzle and impact lighting that reveals enemies, a Chop Doc sit-down sequence, and hub fixes.
 - **Its verification finds real bugs.** Input-driven playtests (keyboard, mouse and touch, landscape and portrait), a scripted run through the floor-5 boss and a headless WebGL check found three problems nobody had reported: crowds pushing the player through walls, a 200,000-damage stat from the boss's adds, and the player staying attached to cover after a teleport. The recovery run found two more: the boss arena unlocked at the start of every boss fight, and button presses were dropped on any frame longer than 0.12 s (verified fixed at 4 fps). All were fixed.
 - **Honest build notes.** The completion summary explained why combat had never started and why its earlier tests missed it, listed what was not verified, and listed each departure from the design. That is the information a creator needs to decide what to test.
+- **A full-game build from one design document.** With a 400-line design document (including a 13-point carry-over list) and one CSV attached, a single "build the full game" run delivered the whole design, section by section. It stopped at checkpoints when interrupted, found and fixed three new AI and route stalls with bots, flagged where a creator target couldn’t be met as written (the voucher ladder unlocks the Armory in 5 wins, not 6–7) without silently changing it, and exported the voice and music specs the creator needs for the audio pass.
 - **Tester callouts.** Asked for in run 3, the WHAT’S NEW overlay labels each change in-game with its note ID and what to check, and lists them all as SEEN or NEW in the pause menu. It turned playtesting from "find what changed" into a checklist. Worth using in every iteration and game jam.
+- **Voice without an external service.** With no ElevenLabs or online voice available, the builder voiced all 121 host and player lines with a local open model (Kokoro-82M, Apache-2.0). It reported the exact voice blends, pitch and effects chain, added the stutter effect at runtime, and exported the script as a CSV, so a creator can re-voice every line elsewhere by line ID.
 - **Touch controls for free.** A full touch layer (twin sticks, a contextual COVER button) was generated alongside keyboard and mouse.
 - **Performance headroom.** Smooth on a current iPhone, even at desktop settings (the cost shows up as heat, N15).
 
@@ -490,6 +518,10 @@ The engine (Unity) was never the problem. Every serious issue was a **verificati
 Nimble Fox's builder is strong at the parts that are usually slow: turning a long design document into a structured plan, a polished UI, a clean data-driven architecture, and working features from a page of notes, with honest notes about what it did. Where it breaks is the last step, proving the build works for a real player on a real device. Close that gap, make the cost of each run visible, and the creator's role shrinks to what it should be: deciding whether the game is fun.
 
 ## Changelog
+- **31 Oct 2026 (full-game build):** Current state rewritten. N19 and N33 updated. The full-game build added to What worked.
+- **29 Oct 2026 (run 6):** N37 added (a backend "serverOverloaded" error ended the run in section E, and the half-done state was built). Sections A–D completed with checkpoints.
+- **29 Oct 2026:** N16 fixed by the platform: host controls moved out of the game viewer.
+- **29 Oct 2026 (run 5):** N30, N31 and N34 fixed with outcome-based tests and root causes, pending playtest. N22 updated (an ambiguous note resolved by assumption). Local voice generation added to What worked.
 - **29 Oct 2026:** N36 added (Tripo textures imported as cubemaps on the second project; BLACKOUT checked and unaffected). N35 added (upload limits; every message triggers a rebuild), observed on a second Nimble Fox project. The game is now titled BLACKOUT. Report retitled to cover every Nimble Fox build, not just BLACKOUT.
 - **28 Oct 2026 (creator playtest of run 4):** N34 added. N30 and N31 reopened in part. N15 confirmed fixed on iPhone. New ranked recommendation: test the effect, not the activity.
 - **28 Oct 2026 (run 4):** N18 root cause (hitstop, not lighting) and back to Low. N31 and N32 fixed with tests, pending playtest. N12 partly met with the builder’s explanation. N33 and N19 updated.
